@@ -1,55 +1,43 @@
 # 📱 Graham Screener — Instalación en Android
 
-La carpeta **`app/`** contiene la aplicación completa (PWA — Progressive Web App).
-Se instala en Android como una app normal: con su propio ícono, pantalla completa
-y funcionamiento sin conexión.
+La app ya está publicada y se actualiza sola. **Dirección oficial:**
+
+> ### https://faustomanjarrez.github.io/graham-screener/
 
 ---
 
-## Opción A — Publicar en Netlify (recomendada, ~2 minutos)
+## Instalar en tu teléfono (1 minuto)
 
-1. Entra a **https://app.netlify.com/drop** (crea una cuenta gratis si no tienes).
-2. Arrastra la carpeta **`app`** completa a la página.
-3. Netlify te da una dirección, por ejemplo: `https://graham-screener.netlify.app`.
-4. Abre esa dirección en **Chrome en tu teléfono Android**.
-5. Toca el menú **⋮** → **"Agregar a pantalla principal"** (o el aviso "Instalar app").
-6. Listo: la app queda instalada con su ícono y funciona sin internet.
-
-> 💡 En Netlify puedes cambiar el nombre del sitio en *Site settings → Change site name*.
-
-## Opción B — GitHub Pages
-
-Si usas GitHub: sube la carpeta `app/` a un repositorio, activa **Settings →
-Pages** y abre la URL resultante en Chrome Android. El paso de instalación es
-el mismo (menú ⋮ → Agregar a pantalla principal).
+1. Abre esa dirección en **Chrome en tu Android**.
+2. Toca el menú **⋮** → **"Agregar a pantalla principal"** (o el aviso "Instalar app").
+3. Listo: queda instalada con su ícono, pantalla completa y funciona sin internet.
 
 ---
 
-## 🔄 Cómo actualizar los datos de las acciones
+## 🔄 Actualización de datos — automática
 
-Los datos vienen incluidos en la app (845 acciones del S&P 500 + MidCap 400).
-Para refrescarlos hay dos caminos:
+Un robot gratuito en la nube (GitHub Actions) corre el screener completo
+**cada día hábil a las 22:30 UTC** (~4:30 pm en México, después del cierre de NYSE)
+y publica los datos nuevos.
 
-**Camino 1 — Importar desde el teléfono (más fácil):**
-1. En tu PC corre `run_screener.bat` (tarda ~20 min).
-2. Envíate el archivo `graham_screen.json` al teléfono (correo, Drive, WhatsApp…).
-3. En la app toca el botón **⬇** (arriba a la derecha) y elige el archivo.
-   Los datos quedan guardados en el teléfono, incluso sin conexión.
+- La app los busca sola al abrirla con internet.
+- También puedes forzar la búsqueda con el botón **🔄** (arriba a la derecha).
+- Respaldo manual: corre `run_screener.bat` en tu PC y usa el botón **⬇ Importar**
+  con el archivo `graham_screen.json`.
 
-**Camino 2 — Volver a publicar:**
-1. Corre `run_screener.bat` — ahora también actualiza `app/data.js` automáticamente.
-2. Vuelve a arrastrar la carpeta `app` a Netlify Drop (misma cuenta = misma URL).
-3. En el teléfono, abre la app dos veces (la segunda carga los datos nuevos).
+Puedes ver las corridas del robot en:
+https://github.com/faustomanjarrez/graham-screener/actions
+
+> ⚠️ Nota: Yahoo Finance a veces limita las consultas desde la nube. Si una corrida
+> falla, se reintenta al siguiente día hábil automáticamente — no hay que hacer nada.
 
 ---
 
 ## 🏪 ¿Y si la quiero en Google Play?
 
-Una PWA se convierte en un archivo instalable (APK/AAB) sin programar nada:
-
-1. Publica la app (Opción A o B).
-2. Entra a **https://www.pwabuilder.com**, pega tu URL y descarga el paquete Android.
-3. Ese paquete se puede instalar directo en el teléfono o subir a Google Play
+1. Entra a **https://www.pwabuilder.com** y pega la dirección de la app.
+2. Descarga el paquete Android (APK/AAB).
+3. Se puede instalar directo en el teléfono o subir a Google Play
    (requiere cuenta de desarrollador de Google, USD $25 una sola vez).
 
 ---

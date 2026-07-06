@@ -403,6 +403,18 @@ main { padding: 14px 14px 20px; max-width: 720px; margin: 0 auto; }
 }
 .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
+/* ═══ Café + legales ═══ */
+.coffee-card { text-align: center; }
+.coffee-text { font-size: .78rem; color: var(--text2); line-height: 1.5; margin-bottom: 12px; }
+.btn-coffee {
+  display: inline-block; padding: 11px 22px; border-radius: 12px;
+  background: #ffdd00; color: #1a1a1a; font-weight: 800; font-size: .85rem;
+  text-decoration: none;
+}
+.btn-coffee:active { opacity: .85; }
+.legal-links { text-align: center; font-size: .68rem; color: var(--text3); padding: 4px 0 10px; }
+.legal-links a { color: var(--text3); text-decoration: underline; }
+
 /* ═══ Tablet+ ═══ */
 @media (min-width: 640px) {
   .stock-list { display: grid; grid-template-columns: 1fr 1fr; }

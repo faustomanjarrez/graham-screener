@@ -1,5 +1,5 @@
 /* Graham Screener — service worker (offline-first) */
-const CACHE = 'graham-v3';
+const CACHE = 'graham-v4';
 const ASSETS = [
   './',
   './index.html',

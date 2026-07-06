@@ -19,13 +19,11 @@ Todo lo que necesitas está preparado. Los pasos marcados 👤 los haces tú
 
 ---
 
-## Paso 1 — Buy Me a Coffee 👤
+## Paso 1 — Ko-fi ✅ HECHO
 
-1. Entra a **https://buymeacoffee.com** y regístrate (gratis).
-2. Elige el nombre de usuario **faustomanjarrez** — el botón de la app ya apunta a
-   `buymeacoffee.com/faustomanjarrez`. Si eliges otro nombre, avísale a Claude para
-   ajustar el enlace (1 minuto).
-3. Conecta tu método de cobro (banco o Wise) en Settings → Payouts.
+Cuenta creada: **ko-fi.com/faustomanjarrez** — el botón de la app ya apunta ahí.
+Pendiente solo: conectar tu método de cobro en Ko-fi (Settings → Payment options,
+acepta PayPal o Stripe).
 
 ## Paso 2 — Generar el paquete Android (PWABuilder) 👤/🤖
 

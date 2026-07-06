@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#065f46" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0b1220" media="(prefers-color-scheme: dark)">
+<meta name="description" content="Screener de acciones subvaluadas según el método de Benjamin Graham — S&P 500 + S&P MidCap 400">
+<title>Graham Screener</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- ═══ Header ═══ -->
+<header class="hdr">
+  <div class="hdr-brand">
+    <svg class="hdr-logo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 17 9 11 13 15 21 7"/><polyline points="15 7 21 7 21 13"/></svg>
+    <div>
+      <h1>Graham <span>Screener</span></h1>
+      <div class="hdr-sub" id="hdrUpdated">—</div>
+    </div>
+  </div>
+  <div class="hdr-actions">
+    <button class="icon-btn" id="btnRefresh" title="Actualizar datos" aria-label="Actualizar datos">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+    </button>
+    <button class="icon-btn" id="btnImport" title="Importar archivo de datos" aria-label="Importar datos">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+    </button>
+    <button class="icon-btn" id="btnTheme" title="Cambiar tema" aria-label="Cambiar tema">
+      <svg id="iconMoon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      <svg id="iconSun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+    </button>
+  </div>
+  <input type="file" id="fileImport" accept=".json,.js" hidden>
+</header>
+
+<main id="main">
+
+<!-- ═══ VISTA: SCREENER ═══ -->
+<section class="view active" id="view-screener">
+  <div class="stats-row" id="statsRow"></div>
+
+  <div class="search-wrap">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input type="search" id="searchBox" placeholder="Buscar ticker o empresa…" autocomplete="off">
+  </div>
+
+  <div class="chips-scroll" id="filterChips">
+    <button class="chip active" data-filter="all">Todas</button>
+    <button class="chip" data-filter="strong">🟢 MoS ≥ 33%</button>
+    <button class="chip" data-filter="under">Subvaluadas</button>
+    <button class="chip" data-filter="stars4">★★★★</button>
+    <button class="chip" data-filter="over">Sobrevaluadas</button>
+  </div>
+
+  <div class="selects-row">
+    <select id="sectorSel" aria-label="Sector"></select>
+    <select id="sortSel" aria-label="Ordenar por">
+      <option value="mos">↓ Margen de seguridad</option>
+      <option value="stars">↓ Estrellas</option>
+      <option value="pe">↑ P/E</option>
+      <option value="pb">↑ P/B</option>
+      <option value="mcap">↓ Capitalización</option>
+      <option value="ticker">A–Z Ticker</option>
+    </select>
+  </div>
+
+  <div class="result-count" id="resultCount"></div>
+  <div class="stock-list" id="stockList"></div>
+  <button class="btn-more" id="btnMore" style="display:none">Cargar más</button>
+</section>
+
+<!-- ═══ VISTA: WATCHLIST ═══ -->
+<section class="view" id="view-watchlist">
+  <div class="card">
+    <div class="card-title">➕ Agregar acción manual</div>
+    <div class="form-grid">
+      <div class="fg"><label for="fTk">Ticker</label><input id="fTk" type="text" placeholder="AAPL" maxlength="12" autocapitalize="characters"></div>
+      <div class="fg"><label for="fPr">Precio ($)</label><input id="fPr" type="number" inputmode="decimal" placeholder="175.50" min="0" step="0.01"></div>
+      <div class="fg"><label for="fEp">EPS (TTM)</label><input id="fEp" type="number" inputmode="decimal" placeholder="6.13" step="0.01"></div>
+      <div class="fg"><label for="fBv">BVPS</label><input id="fBv" type="number" inputmode="decimal" placeholder="4.25" step="0.01"></div>
+      <div class="fg fg-full"><label for="fNm">Nombre (opcional)</label><input id="fNm" type="text" placeholder="Apple Inc."></div>
+    </div>
+    <button class="btn-primary" id="btnAdd">Agregar a watchlist</button>
+    <p class="form-hint">EPS y BVPS en <a href="https://finance.yahoo.com" target="_blank" rel="noopener">finance.yahoo.com</a> → Statistics. Para BMV usa sufijo .MX (ej. AMXB.MX)</p>
+  </div>
+  <div class="card">
+    <div class="card-head">
+      <span class="card-title">Mi watchlist</span>
+      <span class="card-count" id="wlCount"></span>
+    </div>
+    <div id="wlBody"></div>
+  </div>
+</section>
+
+<!-- ═══ VISTA: MERCADO ═══ -->
+<section class="view" id="view-market">
+  <div class="card">
+    <div class="card-title">Indicador Buffett — Market Cap / GNP</div>
+    <div class="bi-flex">
+      <div id="biGauge"></div>
+      <div class="bi-info">
+        <div class="bi-num-row"><span class="bi-num" id="biNum">—</span><span class="bi-unit">% del GNP</span></div>
+        <span class="bi-pill" id="biPill">Sin dato</span>
+        <div class="bi-date" id="biDate"></div>
+      </div>
+    </div>
+    <div class="bi-zones">
+      <span class="zone z-green">&lt;75% Subvaluado</span>
+      <span class="zone z-yellow">75–90% Justo</span>
+      <span class="zone z-orange">90–115% Alto</span>
+      <span class="zone z-red">&gt;115% Peligro</span>
+    </div>
+    <div class="bi-edit">
+      <input type="number" id="biIn" inputmode="decimal" placeholder="ej. 182" min="0" max="500">
+      <button class="btn-primary" id="btnBI">Actualizar</button>
+    </div>
+    <p class="form-hint">Consulta el valor actual en <a href="https://www.gurufocus.com/stock-market-valuations.php" target="_blank" rel="noopener">gurufocus.com — Market Valuations</a></p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🟢 Oportunidades por sector <span class="card-title-note">(MoS ≥ 0%)</span></div>
+    <div id="sectorBars"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">⭐ Top 10 — Mayor margen de seguridad</div>
+    <div id="topList"></div>
+  </div>
+</section>
+
+<!-- ═══ VISTA: GUÍA ═══ -->
+<section class="view" id="view-guide">
+  <div class="card">
+    <div class="card-title">📐 Método de Benjamin Graham</div>
+    <div class="formula">Graham # = √(22.5 × EPS × BVPS)</div>
+    <ul class="guide-list">
+      <li><strong>EPS</strong> — ganancias por acción de los últimos 12 meses</li>
+      <li><strong>BVPS</strong> — valor en libros por acción</li>
+      <li><strong>22.5</strong> — P/E máximo (15) × P/B máximo (1.5) según Graham</li>
+      <li>Precio &lt; Graham # → la acción cotiza bajo su valor intrínseco</li>
+      <li>Graham recomendaba comprar con <strong>margen de seguridad ≥ 33%</strong></li>
+      <li>EPS o BVPS negativos → Graham # inválido (no aplica el método)</li>
+    </ul>
+  </div>
+  <div class="card">
+    <div class="card-title">★ Score de 4 estrellas</div>
+    <ul class="guide-list">
+      <li>★ Precio &lt; Graham Number</li>
+      <li>★ P/E ≤ 15</li>
+      <li>★ P/B ≤ 1.5</li>
+      <li>★ P/E × P/B ≤ 22.5</li>
+    </ul>
+  </div>
+  <div class="card">
+    <div class="card-title">🔄 Cómo actualizar los datos</div>
+    <ol class="guide-steps">
+      <li><strong>Automático:</strong> cada día hábil, después del cierre del mercado, un robot en la nube (GitHub Actions) corre el screener completo y publica los datos nuevos.</li>
+      <li>En la app, toca el botón <strong>🔄 Actualizar</strong> (arriba a la derecha) para traerlos. También se refrescan solos al abrir la app con internet.</li>
+      <li><strong>Manual (respaldo):</strong> corre <code>run_screener.bat</code> en tu PC y usa el botón <strong>⬇ Importar</strong> con el archivo <code>graham_screen.json</code>.</li>
+    </ol>
+    <p class="form-hint">Los datos se guardan en el teléfono y quedan disponibles sin conexión.</p>
+  </div>
+  <div class="warn-box">
+    ⚠️ <strong>Nota BRK-B:</strong> Berkshire reporta BVPS en escala Clase A. El dato de Yahoo Finance infla su Graham Number — no es confiable para BRK-B.
+  </div>
+  <div class="warn-box info">
+    ℹ️ Esta app es una herramienta educativa de análisis cuantitativo. No constituye asesoría de inversión.
+  </div>
+</section>
+
+</main>
+
+<!-- ═══ Bottom Nav ═══ -->
+<nav class="bottom-nav">
+  <button class="nav-item active" data-view="screener">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <span>Screener</span>
+  </button>
+  <button class="nav-item" data-view="watchlist">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+    <span>Watchlist</span>
+  </button>
+  <button class="nav-item" data-view="market">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 1 0 10 10"/><path d="M12 12l6-6"/><path d="M22 2l-4 1 3 3z" fill="currentColor" stroke="none"/></svg>
+    <span>Mercado</span>
+  </button>
+  <button class="nav-item" data-view="guide">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+    <span>Guía</span>
+  </button>
+</nav>
+
+<!-- ═══ Detail Sheet ═══ -->
+<div class="sheet-backdrop" id="sheetBackdrop"></div>
+<div class="sheet" id="sheet" role="dialog" aria-modal="true">
+  <div class="sheet-handle"></div>
+  <div id="sheetBody"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

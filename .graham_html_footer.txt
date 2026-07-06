@@ -1,0 +1,244 @@
+
+
+// ── State ─────────────────────────────────────────────────────────────────
+let biVal     = parseFloat(localStorage.getItem('gra_bi') || '182');
+let wlStocks  = JSON.parse(localStorage.getItem('gra_wl') || '[]');
+let curFilter = 'all';
+let sortCol   = 'mos';
+let sortDir   = -1;
+
+// ── Tabs ──────────────────────────────────────────────────────────────────
+function switchTab(name) {
+  ['screener','watchlist','guide'].forEach((n,i) => {
+    document.querySelectorAll('.tab')[i].classList.toggle('active', n===name);
+    document.getElementById('pan'+n[0].toUpperCase()+n.slice(1)).classList.toggle('active', n===name);
+  });
+}
+
+// ── Buffett Gauge (pure SVG — no external dependency) ────────────────────
+function biInfo(v) {
+  if (v < 75)  return {lbl:'🟢 Mercado Subvaluado',           color:'#059669', bg:'#d1fae5'};
+  if (v < 90)  return {lbl:'🟡 Valor Justo',                   color:'#d97706', bg:'#fef3c7'};
+  if (v < 115) return {lbl:'🟠 Moderadamente Sobrevaluado',    color:'#ea580c', bg:'#ffedd5'};
+  if (v < 135) return {lbl:'🔴 Significativamente Sobrevaluado', color:'#dc2626', bg:'#fee2e2'};
+  return              {lbl:'🚨 Extremadamente Peligroso',      color:'#7f1d1d', bg:'#fecaca'};
+}
+
+function renderGauge(v) {
+  const info = biInfo(v);
+  // Update text
+  const numEl = document.getElementById('biNum');
+  if (numEl) { numEl.textContent = v + '%'; numEl.style.color = info.color; }
+  const pillEl = document.getElementById('biPill');
+  if (pillEl) { pillEl.textContent = info.lbl; pillEl.style.background = info.bg; pillEl.style.color = info.color; }
+  const inEl = document.getElementById('biIn');
+  if (inEl) inEl.value = v;
+
+  // Build SVG gauge
+  const wrap = document.getElementById('biGaugeWrap');
+  if (!wrap) return;
+  const CX = 60, CY = 64, R = 46, MAX = 250;
+  function pt(val) {
+    const a = Math.PI + (Math.min(val, MAX) / MAX) * Math.PI;
+    return [CX + R * Math.cos(a), CY + R * Math.sin(a)];
+  }
+  function seg(from, to, color) {
+    const [x1,y1] = pt(from), [x2,y2] = pt(to);
+    const large = (to - from) / MAX > 0.5 ? 1 : 0;
+    return `<path d="M${x1.toFixed(1)},${y1.toFixed(1)} A${R},${R} 0 ${large},1 ${x2.toFixed(1)},${y2.toFixed(1)}" fill="none" stroke="${color}" stroke-width="9" stroke-linecap="butt"/>`;
+  }
+  const segs = [[0,75,'#059669'],[75,90,'#d97706'],[90,115,'#ea580c'],[115,135,'#dc2626'],[135,250,'#7f1d1d']];
+  const [nx,ny] = pt(v);
+  wrap.innerHTML = `<svg viewBox="0 0 120 70" width="140" height="82" style="display:block;">
+    ${segs.map(([a,b,c])=>seg(a,b,c)).join('')}
+    <line x1="${CX}" y1="${CY}" x2="${nx.toFixed(1)}" y2="${ny.toFixed(1)}" stroke="${info.color}" stroke-width="2.5" stroke-linecap="round"/>
+    <circle cx="${CX}" cy="${CY}" r="4.5" fill="#1a1a2e"/>
+  </svg>`;
+}
+
+function updateBI() {
+  const v = parseFloat(document.getElementById('biIn').value);
+  if (isNaN(v) || v < 0) return;
+  biVal = v;
+  localStorage.setItem('gra_bi', v);
+  renderGauge(v);
+}
+
+// ── Screener ──────────────────────────────────────────────────────────────
+function toggleHow() {
+  const el = document.getElementById('refreshInfo');
+  el.style.display = el.style.display === 'none' ? 'block' : 'none';
+}
+
+function setFilter(f, el) {
+  curFilter = f;
+  document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+  if (el) el.classList.add('active');
+  renderTbl();
+}
+
+function renderScreener() {
+  const valid = SCREENER.stocks.filter(s => s.valid && s.mos !== null);
+  const under = valid.filter(s => s.mos >= 0);
+  const strong = valid.filter(s => s.mos >= 33);
+  document.getElementById('screenStats').innerHTML =
+    `<span class="stat-pill pill-gray">${valid.length} analizadas</span>` +
+    `<span class="stat-pill pill-yellow">${under.length} subvaluadas</span>` +
+    `<span class="stat-pill pill-green">${strong.length} MoS≥33%</span>`;
+  const d = new Date(SCREENER.updated);
+  document.getElementById('updLbl').textContent =
+    'Datos: ' + d.toLocaleDateString('es-MX') + ' ' + d.toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'});
+  renderTbl();
+}
+
+function renderTbl() {
+  const search = (document.getElementById('searchBox') ? document.getElementById('searchBox').value : '').toLowerCase();
+  let stocks = SCREENER.stocks.filter(s => {
+    const hasSearch = search.length > 0;
+    if (!s.valid || s.mos === null) {
+      if (curFilter !== 'all') return false;
+      if (hasSearch) return s.ticker.toLowerCase().includes(search) || (s.name||'').toLowerCase().includes(search);
+      return true;
+    }
+    if (hasSearch && !s.ticker.toLowerCase().includes(search) && !(s.name||'').toLowerCase().includes(search)) return false;
+    if (curFilter === 'strong') return s.mos >= 33;
+    if (curFilter === 'under')  return s.mos >= 0;
+    if (curFilter === 'over')   return s.valid && s.mos !== null && s.mos < 0;
+    return true;
+  });
+
+  stocks.sort((a, b) => {
+    let va = a[sortCol] !== undefined && a[sortCol] !== null ? a[sortCol] : -Infinity;
+    let vb = b[sortCol] !== undefined && b[sortCol] !== null ? b[sortCol] : -Infinity;
+    return (va < vb ? -1 : va > vb ? 1 : 0) * sortDir;
+  });
+
+  const rows = stocks.length ? stocks.map(s => {
+    if (!s.valid || s.mos === null) {
+      return `<tr><td><div class="tk">${s.ticker}</div><div class="nm">${(s.name||'').slice(0,32)}</div></td>
+        <td colspan="7" style="color:#9ca3af;font-size:0.78rem;">BVPS negativo o EPS &lt; 0 — Graham no aplica</td><td></td></tr>`;
+    }
+    const n = s.stars || 0;
+    const stars = `<span class="sy">${'★'.repeat(n)}</span><span class="sg">${'★'.repeat(4-n)}</span>`;
+    const mosH = `<span class="${s.mos >= 0 ? 'mos-pos' : 'mos-neg'}">${s.mos.toFixed(1)}%</span>`;
+    const gnH  = s.graham_num ? `<span class="gn-val">$${s.graham_num.toFixed(2)}</span>` : '—';
+    const pe = s.pe, pb = s.pb;
+    const peH = pe ? `${pe}<span class="${pe<=15?'chk':'fai'}">${pe<=15?' ✓':' ✗'}</span>` : '—';
+    const pbH = pb ? `${pb}<span class="${pb<=1.5?'chk':'fai'}">${pb<=1.5?' ✓':' ✗'}</span>` : '—';
+    const mc  = s.market_cap ? (s.market_cap>=1e12 ? `$${(s.market_cap/1e12).toFixed(1)}T` : `$${(s.market_cap/1e9).toFixed(0)}B`) : '—';
+    const st  = s.mos>=33 ? {lbl:'✅ Fuerte compra',cls:'b-strong'} : s.mos>=0 ? {lbl:'🟡 Subvaluado',cls:'b-under'} : {lbl:'⚠️ Sobrevaluado',cls:'b-over'};
+    const anom = s.anomaly ? `<div class="anomaly">⚠️ ${s.anomaly}</div>` : '';
+    return `<tr>
+      <td><div class="tk">${s.ticker}</div><div class="nm">${(s.name||'').slice(0,30)}</div>${anom}</td>
+      <td class="num hide-sm" style="color:#6c757d;font-size:0.78rem;">${mc}</td>
+      <td class="num">$${(s.price||0).toFixed(2)}</td>
+      <td class="num">${gnH}</td>
+      <td class="num">${mosH}</td>
+      <td class="num hide-sm">${peH}</td>
+      <td class="num hide-sm">${pbH}</td>
+      <td>${stars}</td>
+      <td><span class="badge ${st.cls}">${st.lbl}</span></td>
+    </tr>`;
+  }).join('') : `<tr class="empty-row"><td colspan="9">Sin acciones para este filtro.</td></tr>`;
+
+  document.getElementById('screenerTbl').innerHTML = `<table>
+    <thead><tr>
+      <th onclick="sortBy('ticker')">Ticker</th>
+      <th class="hide-sm" onclick="sortBy('market_cap')">Mkt Cap</th>
+      <th onclick="sortBy('price')">Precio</th>
+      <th class="th-tip" title="√(22.5 × EPS × BVPS)" onclick="sortBy('graham_num')">Graham #</th>
+      <th class="th-tip" title="Margen de Seguridad. Rec. ≥33%" onclick="sortBy('mos')">Margen Seg.</th>
+      <th class="th-tip hide-sm" title="P/E ideal ≤ 15" onclick="sortBy('pe')">P/E</th>
+      <th class="th-tip hide-sm" title="P/B ideal ≤ 1.5" onclick="sortBy('pb')">P/B</th>
+      <th class="th-tip" title="★★★★ máximo" onclick="sortBy('stars')">Score</th>
+      <th>Estado</th>
+    </tr></thead>
+    <tbody>${rows}</tbody>
+  </table>`;
+}
+
+function sortBy(col) {
+  if (sortCol === col) sortDir *= -1; else { sortCol = col; sortDir = -1; }
+  renderTbl();
+}
+
+// ── Watchlist ─────────────────────────────────────────────────────────────
+function gNum(e,b) { return e>0&&b>0 ? Math.sqrt(22.5*e*b) : null; }
+function statusOf(mos) {
+  if (mos === null) return {lbl:'Sin datos',cls:'b-na'};
+  if (mos >= 33) return {lbl:'✅ Fuerte compra',cls:'b-strong'};
+  if (mos >= 0)  return {lbl:'🟡 Subvaluado',cls:'b-under'};
+  return               {lbl:'⚠️ Sobrevaluado',cls:'b-over'};
+}
+function starCount(p,g,e,b) {
+  if (!g||!p) return 0; let n=0;
+  if (p<g) n++;
+  const pe=e>0?p/e:null, pb=b>0?p/b:null;
+  if (pe&&pe<=15) n++; if (pb&&pb<=1.5) n++; if (pe&&pb&&pe*pb<=22.5) n++;
+  return n;
+}
+function addStock() {
+  const tk = document.getElementById('fTk').value.trim().toUpperCase();
+  const pr = parseFloat(document.getElementById('fPr').value);
+  const ep = parseFloat(document.getElementById('fEp').value);
+  const bv = parseFloat(document.getElementById('fBv').value);
+  const nm = document.getElementById('fNm').value.trim();
+  if (!tk) { document.getElementById('fTk').focus(); return; }
+  if (!pr||pr<=0) { document.getElementById('fPr').focus(); return; }
+  if (isNaN(ep)) { document.getElementById('fEp').focus(); return; }
+  if (isNaN(bv)) { document.getElementById('fBv').focus(); return; }
+  const gn = gNum(ep,bv);
+  const mos = gn ? Math.round(((gn-pr)/gn*100)*10)/10 : null;
+  const stars = starCount(pr,gn,ep,bv);
+  const entry = {ticker:tk,name:nm,price:pr,eps:ep,bvps:bv,gn:gn?Math.round(gn*100)/100:null,mos,stars};
+  const idx = wlStocks.findIndex(s=>s.ticker===tk);
+  if (idx>=0) wlStocks[idx]=entry; else wlStocks.push(entry);
+  localStorage.setItem('gra_wl',JSON.stringify(wlStocks));
+  renderWL();
+  ['fTk','fPr','fEp','fBv','fNm'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('fTk').focus();
+}
+function removeWL(i) {
+  if (!confirm(`¿Eliminar ${wlStocks[i].ticker}?`)) return;
+  wlStocks.splice(i,1); localStorage.setItem('gra_wl',JSON.stringify(wlStocks)); renderWL();
+}
+function renderWL() {
+  const cnt = document.getElementById('wlCount');
+  if (cnt) cnt.textContent = wlStocks.length ? `${wlStocks.length} acción${wlStocks.length!==1?'es':''}` : '';
+  const body = document.getElementById('wlBody');
+  if (!body) return;
+  if (!wlStocks.length) { body.innerHTML='<div class="empty-state"><div class="icon">📋</div><p>Agrega acciones manualmente.</p></div>'; return; }
+  const rows = wlStocks.map((s,i) => {
+    const pe=s.eps>0?(s.price/s.eps).toFixed(1):null, pb=s.bvps>0?(s.price/s.bvps).toFixed(2):null;
+    const st=statusOf(s.mos), n=s.stars||0;
+    const stars=`<span class="sy">${'★'.repeat(n)}</span><span class="sg">${'★'.repeat(4-n)}</span>`;
+    const mosH=s.mos!==null?`<span class="${s.mos>=0?'mos-pos':'mos-neg'}">${s.mos.toFixed(1)}%</span>`:'—';
+    const gnH=s.gn?`<span class="gn-val">$${s.gn.toFixed(2)}</span>`:'—';
+    const peH=pe?`${pe}<span class="${+pe<=15?'chk':'fai'}">${+pe<=15?' ✓':' ✗'}</span>`:'—';
+    const pbH=pb?`${pb}<span class="${+pb<=1.5?'chk':'fai'}">${+pb<=1.5?' ✓':' ✗'}</span>`:'—';
+    return `<tr>
+      <td><div class="tk">${s.ticker}</div>${s.name?`<div class="nm">${s.name}</div>`:''}</td>
+      <td class="num">$${s.price.toFixed(2)}</td><td class="num">${gnH}</td><td class="num">${mosH}</td>
+      <td class="num hide-sm">${peH}</td><td class="num hide-sm">${pbH}</td>
+      <td>${stars}</td><td><span class="badge ${st.cls}">${st.lbl}</span></td>
+      <td><button onclick="removeWL(${i})" style="background:none;border:none;color:#d1d5db;cursor:pointer;font-size:0.9rem;padding:3px 6px;" title="Eliminar">✕</button></td>
+    </tr>`;
+  }).join('');
+  body.innerHTML = `<div class="tbl-wrap"><table>
+    <thead><tr><th>Ticker</th><th>Precio</th><th>Graham #</th><th>Margen Seg.</th>
+    <th class="hide-sm">P/E</th><th class="hide-sm">P/B</th><th>Score</th><th>Estado</th><th></th></tr></thead>
+    <tbody>${rows}</tbody></table></div>`;
+}
+
+['fTk','fPr','fEp','fBv','fNm'].forEach(id => {
+  const el = document.getElementById(id);
+  if (el) el.addEventListener('keydown', e => { if (e.key==='Enter') addStock(); });
+});
+
+// ── Init (screener first, gauge is independent) ───────────────────────────
+renderScreener();
+renderWL();
+renderGauge(biVal);
+</script>
+</body>
+</html>

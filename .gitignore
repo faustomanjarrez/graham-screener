@@ -1,0 +1,9 @@
+# Archivos regenerables / locales — no van al repositorio
+.graham_cache.jsonl
+graham_errors.log
+graham_errors.log.bak
+graham_run.done
+graham_local.html
+_test_size.json
+.claude/
+__pycache__/

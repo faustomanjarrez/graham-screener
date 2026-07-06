@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Graham Stock Analyzer</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#f4f6f9;color:#1a1a2e;padding:14px;min-height:100vh;}
+
+.hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid #e2e6ea;}
+.hdr h1{font-size:1.15rem;font-weight:800;}.hdr h1 span{color:#2c6e49;}
+.updated-lbl{font-size:0.68rem;color:#9ca3af;}
+
+.bi-bar{background:white;border-radius:10px;padding:12px 16px;border:1px solid #e8ecef;margin-bottom:12px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+.bi-gauge-wrap{flex-shrink:0;}
+.bi-right{flex:1;min-width:200px;}
+.bi-value{font-size:1.6rem;font-weight:800;line-height:1;}
+.bi-status-pill{display:inline-block;padding:2px 10px;border-radius:20px;font-size:0.72rem;font-weight:700;margin-top:4px;}
+.bi-zones{display:flex;gap:4px;flex-wrap:wrap;margin-top:6px;}
+.bi-zone{font-size:0.6rem;padding:2px 6px;border-radius:8px;}
+.bi-update{display:flex;align-items:center;gap:6px;margin-left:auto;}
+.bi-update input{width:68px;padding:4px 7px;border:1.5px solid #dee2e6;border-radius:6px;font-size:0.8rem;}
+.bi-update button{padding:4px 10px;background:#2c6e49;color:white;border:none;border-radius:6px;font-size:0.75rem;font-weight:700;cursor:pointer;}
+.bi-hint{font-size:0.65rem;color:#9ca3af;margin-top:4px;}
+.bi-hint a{color:#2c6e49;text-decoration:none;}
+
+.tabs{display:flex;gap:2px;margin-bottom:12px;}
+.tab{padding:7px 16px;border-radius:8px 8px 0 0;font-size:0.85rem;font-weight:600;cursor:pointer;border:1px solid #e2e6ea;border-bottom:none;background:#f0f2f5;color:#6c757d;}
+.tab.active{background:white;color:#1a1a2e;}
+.panel{display:none;}.panel.active{display:block;}
+
+.card{background:white;border-radius:10px;padding:16px;box-shadow:0 1px 4px rgba(0,0,0,.07);border:1px solid #e8ecef;}
+.card-title{font-size:0.66rem;font-weight:700;color:#6c757d;text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px;}
+
+.screen-hdr{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px;}
+.screen-stats{display:flex;gap:8px;flex-wrap:wrap;}
+.stat-pill{padding:4px 12px;border-radius:20px;font-size:0.75rem;font-weight:700;}
+.pill-green{background:#d1fae5;color:#065f46;}.pill-yellow{background:#fef3c7;color:#92400e;}.pill-gray{background:#f3f4f6;color:#374151;}
+
+.btn-how{padding:6px 14px;background:#f3f4f6;color:#374151;border:1.5px solid #dee2e6;border-radius:7px;font-size:0.8rem;font-weight:700;cursor:pointer;}
+.refresh-note{background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:10px 14px;margin-bottom:12px;font-size:0.78rem;color:#065f46;line-height:1.5;}
+.refresh-note code{background:#dcfce7;padding:1px 5px;border-radius:4px;font-family:monospace;font-size:0.75rem;}
+
+.filter-bar{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;align-items:center;}
+.filter-chip{padding:4px 12px;border-radius:20px;font-size:0.75rem;font-weight:600;cursor:pointer;border:1.5px solid #dee2e6;background:white;color:#6c757d;}
+.filter-chip.active{background:#2c6e49;color:white;border-color:#2c6e49;}
+.search-box{padding:5px 10px;border:1.5px solid #dee2e6;border-radius:7px;font-size:0.82rem;width:160px;margin-left:auto;}
+.search-box:focus{outline:none;border-color:#2c6e49;}
+
+.tbl-wrap{overflow-x:auto;}
+table{width:100%;border-collapse:collapse;min-width:680px;}
+thead th{text-align:left;padding:8px 12px;font-size:0.62rem;font-weight:700;color:#6c757d;text-transform:uppercase;letter-spacing:.07em;background:#f8f9fa;border-bottom:1px solid #e8ecef;white-space:nowrap;cursor:pointer;user-select:none;}
+thead th:hover{background:#f0f2f5;}
+tbody tr{border-bottom:1px solid #f0f2f4;transition:background .1s;}
+tbody tr:hover{background:#f8fffe;}
+tbody td{padding:9px 12px;font-size:0.84rem;}
+.tk{font-weight:800;font-size:0.88rem;}.nm{font-size:0.7rem;color:#6c757d;margin-top:1px;}
+.num{font-variant-numeric:tabular-nums;}
+.gn-val{font-weight:700;}
+.mos-pos{color:#059669;font-weight:700;}.mos-neg{color:#dc2626;font-weight:700;}
+.chk{color:#059669;font-size:0.7rem;}.fai{color:#dc2626;font-size:0.7rem;}
+.sy{color:#f59e0b;letter-spacing:-1px;font-size:0.82rem;}.sg{color:#d1d5db;letter-spacing:-1px;font-size:0.82rem;}
+.badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:0.68rem;font-weight:700;white-space:nowrap;}
+.b-strong{background:#bbf7d0;color:#14532d;}.b-under{background:#d1fae5;color:#065f46;}
+.b-fair{background:#fef3c7;color:#92400e;}.b-over{background:#fee2e2;color:#991b1b;}.b-na{background:#f3f4f6;color:#6b7280;}
+.anomaly{font-size:0.65rem;color:#9ca3af;margin-top:1px;}
+.empty-row td{text-align:center;padding:28px;color:#9ca3af;font-size:0.85rem;}
+.th-tip{cursor:help;text-decoration:underline dotted;}
+
+.add-form{background:white;border-radius:10px;padding:16px;box-shadow:0 1px 4px rgba(0,0,0,.07);border:1px solid #e8ecef;margin-bottom:12px;}
+.form-row{display:grid;grid-template-columns:90px 1fr 1fr 1fr 1fr auto;gap:8px;align-items:end;}
+.fg label{display:block;font-size:0.62rem;font-weight:700;color:#6c757d;text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px;}
+.fg input{width:100%;padding:7px 8px;border:1.5px solid #dee2e6;border-radius:7px;font-size:0.84rem;}
+.fg input:focus{outline:none;border-color:#2c6e49;}
+.btn-add{padding:7px 14px;background:#2c6e49;color:white;border:none;border-radius:7px;font-size:0.84rem;font-weight:700;cursor:pointer;white-space:nowrap;}
+.form-hint{margin-top:6px;font-size:0.66rem;color:#9ca3af;}
+.form-hint a{color:#2c6e49;text-decoration:none;}
+
+.formula-box{background:#f0fdf4;border:1px solid #bbf7d0;border-radius:7px;padding:8px 12px;font-family:monospace;font-size:0.9rem;text-align:center;color:#065f46;font-weight:600;margin:6px 0 10px;}
+.crit-list{list-style:none;}
+.crit-list li{font-size:0.76rem;padding:3px 0;color:#374151;display:flex;gap:6px;align-items:flex-start;line-height:1.4;}
+.crit-list li::before{content:'▸';color:#2c6e49;flex-shrink:0;margin-top:1px;}
+.info-box{margin-top:10px;padding:10px 12px;border-radius:0 6px 6px 0;font-size:0.78rem;line-height:1.5;}
+
+.empty-state{text-align:center;padding:36px 20px;color:#9ca3af;}
+.empty-state .icon{font-size:2rem;margin-bottom:10px;}
+
+@media(max-width:660px){
+  .form-row{grid-template-columns:1fr 1fr;}
+  .form-row .btn-add{grid-column:1/-1;}
+  .hide-sm{display:none!important;}
+  .bi-update{display:none;}
+}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <h1>📈 <span>Graham</span> Stock Analyzer</h1>
+  <span class="updated-lbl" id="updLbl"></span>
+</div>
+
+<!-- Buffett Indicator -->
+<div class="bi-bar">
+  <div class="bi-gauge-wrap" id="biGaugeWrap"></div>
+  <div class="bi-right">
+    <div style="display:flex;align-items:baseline;gap:8px;">
+      <span class="bi-value" id="biNum">--</span>
+      <span style="font-size:0.75rem;color:#6c757d;">% del GNP</span>
+    </div>
+    <div><span class="bi-status-pill" id="biPill">—</span></div>
+    <div class="bi-zones">
+      <span class="bi-zone" style="background:#d1fae5;color:#065f46">&lt;75% Subval.</span>
+      <span class="bi-zone" style="background:#fef3c7;color:#92400e">75–90% Justo</span>
+      <span class="bi-zone" style="background:#ffedd5;color:#c2410c">90–115% Alto</span>
+      <span class="bi-zone" style="background:#fee2e2;color:#991b1b">&gt;115% Peligro</span>
+    </div>
+    <div class="bi-hint">Actualiza en: <a href="https://www.gurufocus.com/stock-market-valuations.php" target="_blank">gurufocus.com — Market Valuations</a></div>
+  </div>
+  <div class="bi-update">
+    <input type="number" id="biIn" placeholder="182" min="0" max="500">
+    <button onclick="updateBI()">Actualizar</button>
+  </div>
+</div>
+
+<!-- Tabs -->
+<div class="tabs">
+  <div class="tab active" onclick="switchTab('screener')">🔍 Screener S&amp;P 500</div>
+  <div class="tab"        onclick="switchTab('watchlist')">📋 Watchlist Manual</div>
+  <div class="tab"        onclick="switchTab('guide')">📐 Metodología</div>
+</div>
+
+<!-- SCREENER PANEL -->
+<div id="panScreener" class="panel active">
+  <div class="card">
+    <div class="screen-hdr">
+      <span class="card-title" style="margin-bottom:0;">Top 100 S&amp;P 500 — Graham Screen</span>
+      <div class="screen-stats" id="screenStats"></div>
+      <button class="btn-how" onclick="toggleHow()">⟳ ¿Cómo actualizar?</button>
+    </div>
+    <div id="refreshInfo" style="display:none;" class="refresh-note">
+      <strong>Para datos frescos:</strong> Corre <code>run_screener.bat</code> en la carpeta del proyecto y luego dile a Claude: <em>"Actualiza el dashboard con los nuevos datos del screener"</em>.
+    </div>
+    <div class="filter-bar">
+      <span class="filter-chip active" onclick="setFilter('all',this)">Todas</span>
+      <span class="filter-chip"        onclick="setFilter('strong',this)">🟢 MoS ≥ 33%</span>
+      <span class="filter-chip"        onclick="setFilter('under',this)">🟡 Subvaluadas</span>
+      <span class="filter-chip"        onclick="setFilter('over',this)">⚠️ Sobrevaluadas</span>
+      <input class="search-box" id="searchBox" type="text" placeholder="Buscar ticker…" oninput="renderTbl()">
+    </div>
+    <div class="tbl-wrap" id="screenerTbl"></div>
+  </div>
+</div>
+
+<!-- WATCHLIST PANEL -->
+<div id="panWatchlist" class="panel">
+  <div class="add-form">
+    <div class="card-title" style="margin-bottom:10px;">➕ Agregar acción</div>
+    <div class="form-row">
+      <div class="fg"><label>Ticker</label><input id="fTk" type="text" placeholder="AAPL" maxlength="12" style="text-transform:uppercase"></div>
+      <div class="fg"><label>Precio ($)</label><input id="fPr" type="number" placeholder="175.50" min="0" step="0.01"></div>
+      <div class="fg"><label>EPS TTM</label><input id="fEp" type="number" placeholder="6.13" step="0.01"></div>
+      <div class="fg"><label>BVPS</label><input id="fBv" type="number" placeholder="4.25" step="0.01"></div>
+      <div class="fg"><label>Nombre (opt.)</label><input id="fNm" type="text" placeholder="Apple Inc."></div>
+      <button class="btn-add" onclick="addStock()">Agregar</button>
+    </div>
+    <p class="form-hint">EPS y BVPS en <a href="https://finance.yahoo.com" target="_blank">finance.yahoo.com</a> → Statistics. BMV: usa sufijo .MX (ej. AMXL.MX)</p>
+  </div>
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+      <span class="card-title" style="margin-bottom:0;">Watchlist personal</span>
+      <span id="wlCount" style="font-size:0.75rem;color:#6c757d;"></span>
+    </div>
+    <div id="wlBody"><div class="empty-state"><div class="icon">📋</div><p>Agrega acciones manualmente.</p></div></div>
+  </div>
+</div>
+
+<!-- GUIDE PANEL -->
+<div id="panGuide" class="panel">
+  <div class="card">
+    <div class="card-title">📐 Metodología Benjamin Graham</div>
+    <div class="formula-box">Graham Number = √(22.5 × EPS × BVPS)</div>
+    <ul class="crit-list">
+      <li><strong>EPS</strong> = Earnings Per Share — ganancias por acción (últimos 12 meses)</li>
+      <li><strong>BVPS</strong> = Book Value Per Share — valor en libros por acción</li>
+      <li><strong>22.5</strong> = P/E máximo (15) × P/B máximo (1.5) según Graham</li>
+      <li>Precio &lt; Graham Number → acción cotiza bajo su valor intrínseco</li>
+      <li>Graham recomendaba comprar con <strong>Margen de Seguridad ≥ 33%</strong></li>
+      <li>EPS o BVPS negativos = Graham Number inválido (patrimonio negativo)</li>
+    </ul>
+    <div class="info-box" style="background:#fffbeb;border-left:3px solid #f59e0b;color:#92400e;">
+      <strong>Score ★★★★:</strong> 1 estrella por criterio — Precio &lt; Graham#, P/E ≤ 15, P/B ≤ 1.5, P/E × P/B ≤ 22.5
+    </div>
+    <div class="info-box" style="background:#f0f9ff;border-left:3px solid #3b82f6;color:#1e40af;">
+      <strong>Indicador Buffett:</strong> Market Cap USA / GNP. &lt;75% = barato, 75–90% = justo, &gt;115% = caro.
+      Referencia: <a href="https://www.gurufocus.com/stock-market-valuations.php" target="_blank" style="color:#1e40af;">gurufocus.com — Market Valuations</a>
+    </div>
+    <div class="info-box" style="background:#fef2f2;border-left:3px solid #ef4444;color:#991b1b;">
+      ⚠️ <strong>Nota BRK-B:</strong> Berkshire reporta BVPS en escala Clase A (~$505K). yfinance lo aplica a acciones B, inflando artificialmente el Graham Number. Dato no confiable para BRK-B.
+    </div>
+  </div>
+</div>
+
+<script>
+// ── Screener data (embebida — 2026-06-17) ──────────────────────────────────
+var SCREENER={

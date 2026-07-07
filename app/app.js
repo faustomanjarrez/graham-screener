@@ -661,8 +661,20 @@ document.addEventListener('DOMContentLoaded', () => {
   // al abrir con internet, busca datos nuevos en silencio
   if (navigator.onLine) setTimeout(() => refreshData(true), 1500);
 
-  // service worker
+  // service worker — con auto-recarga cuando llega una versión nueva de la app
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('sw.js').catch(() => {});
+    if (navigator.serviceWorker.controller) {
+      // la página ya estaba controlada: si un SW nuevo toma el control,
+      // recargar una vez para usar los archivos nuevos de inmediato
+      let reloaded = false;
+      navigator.serviceWorker.addEventListener('controllerchange', () => {
+        if (reloaded) return;
+        reloaded = true;
+        location.reload();
+      });
+    }
+    navigator.serviceWorker.register('sw.js')
+      .then((reg) => reg.update())
+      .catch(() => {});
   }
 });

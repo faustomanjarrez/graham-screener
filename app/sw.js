@@ -1,5 +1,5 @@
 /* Graham Screener — service worker (offline-first, actualizaciones atómicas) */
-const CACHE = 'graham-v6';
+const CACHE = 'graham-v7';
 const ASSETS = [
   './',
   './index.html',
@@ -15,7 +15,13 @@ const ASSETS = [
 ];
 
 self.addEventListener('install', (e) => {
-  e.waitUntil(caches.open(CACHE).then((c) => c.addAll(ASSETS)).then(() => self.skipWaiting()));
+  // cache:'reload' salta el caché HTTP — garantiza que la instalación
+  // trae todos los archivos frescos y consistentes del servidor
+  e.waitUntil(
+    caches.open(CACHE)
+      .then((c) => c.addAll(ASSETS.map((u) => new Request(u, { cache: 'reload' }))))
+      .then(() => self.skipWaiting())
+  );
 });
 
 self.addEventListener('activate', (e) => {

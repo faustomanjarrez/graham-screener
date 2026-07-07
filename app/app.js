@@ -15,6 +15,7 @@ const LS = {
 let LANG = 'es';
 
 function t(key) {
+  if (typeof I18N === 'undefined') return key;   // por si i18n.js no cargó (caché viejo)
   return (I18N[LANG] && I18N[LANG][key]) || I18N.es[key] || key;
 }
 function tf(key, vars) {

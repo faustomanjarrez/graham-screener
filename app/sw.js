@@ -1,10 +1,11 @@
 /* Graham Screener — service worker (offline-first) */
-const CACHE = 'graham-v4';
+const CACHE = 'graham-v5';
 const ASSETS = [
   './',
   './index.html',
   './styles.css',
   './app.js',
+  './i18n.js',
   './data.js',
   './manifest.json',
   './privacidad.html',

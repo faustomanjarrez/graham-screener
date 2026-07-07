@@ -85,14 +85,19 @@ input, select { font-family: inherit; color: var(--text); }
 .hdr h1 { font-size: 1.06rem; font-weight: 800; line-height: 1.15; }
 .hdr h1 span { color: var(--accent); }
 .hdr-sub { font-size: .66rem; color: var(--text3); }
-.hdr-actions { display: flex; gap: 6px; }
+.hdr-actions { display: flex; gap: 5px; }
+@media (max-width: 400px) {
+  .hdr h1 { font-size: .95rem; }
+  .hdr-logo { width: 26px; height: 26px; }
+}
 .icon-btn {
-  width: 38px; height: 38px; border-radius: 10px;
+  width: 36px; height: 36px; border-radius: 10px;
   border: 1px solid var(--border); background: var(--surface2);
   color: var(--text2); display: grid; place-items: center;
 }
 .icon-btn svg { width: 18px; height: 18px; }
 .icon-btn:active { transform: scale(.93); }
+.btn-lang { font-size: .72rem; font-weight: 800; letter-spacing: .04em; color: var(--accent); }
 
 /* ═══ Views ═══ */
 main { padding: 14px 14px 20px; max-width: 720px; margin: 0 auto; }

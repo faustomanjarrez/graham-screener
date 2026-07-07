@@ -4,11 +4,34 @@
 // ── Estado ────────────────────────────────────────────────────────────────
 const LS = {
   theme: 'graham_theme',
+  lang: 'graham_lang',
   watchlist: 'graham_watchlist',
   bookmarks: 'graham_bookmarks',
   bi: 'graham_bi',
   data: 'graham_imported_data',
 };
+
+// ── Idioma ────────────────────────────────────────────────────────────────
+let LANG = 'es';
+
+function t(key) {
+  return (I18N[LANG] && I18N[LANG][key]) || I18N.es[key] || key;
+}
+function tf(key, vars) {
+  let s = t(key);
+  for (const k in vars) s = s.replace('{' + k + '}', vars[k]);
+  return s;
+}
+function applyLang(lang) {
+  LANG = I18N[lang] ? lang : 'es';
+  localStorage.setItem(LS.lang, LANG);
+  document.documentElement.lang = LANG;
+  document.querySelectorAll('[data-i18n]').forEach((el) => { el.innerHTML = t(el.dataset.i18n); });
+  document.querySelectorAll('[data-i18n-ph]').forEach((el) => { el.placeholder = t(el.dataset.i18nPh); });
+  document.querySelectorAll('[data-i18n-title]').forEach((el) => { el.title = t(el.dataset.i18nTitle); });
+  const btn = document.getElementById('btnLang');
+  if (btn) btn.textContent = LANG === 'es' ? 'EN' : 'ES';
+}
 
 let DATA = null;            // dataset activo (bundled o importado)
 let filtered = [];          // resultado de filtros actual
@@ -17,9 +40,9 @@ const PAGE = 60;
 
 const state = { filter: 'all', search: '', sector: '', sort: 'mos' };
 
-// Tickers con datos conocidamente poco confiables en Yahoo Finance
+// Tickers con datos conocidamente poco confiables en Yahoo Finance → clave i18n
 const ANOMALIES = {
-  'BRK-B': 'Berkshire reporta BVPS en escala Clase A — el Graham # está inflado y no es confiable.',
+  'BRK-B': 'anomaly_brkb',
 };
 
 // ── Utilidades ────────────────────────────────────────────────────────────
@@ -48,7 +71,7 @@ function fmtMcap(v) {
 function fmtDate(iso) {
   try {
     const d = new Date(iso);
-    return d.toLocaleDateString('es-MX', { day: 'numeric', month: 'short', year: 'numeric' });
+    return d.toLocaleDateString(t('locale'), { day: 'numeric', month: 'short', year: 'numeric' });
   } catch { return iso; }
 }
 function escHtml(s) {
@@ -87,11 +110,11 @@ function grahamStars(price, gn, eps, bvps) {
 
 // ── Clasificación ─────────────────────────────────────────────────────────
 function verdict(stock) {
-  if (!stock.valid || stock.mos == null) return { cls: 'b-na', label: 'Sin datos' };
-  if (stock.mos >= 33) return { cls: 'b-strong', label: 'MoS ≥ 33%' };
-  if (stock.mos >= 0) return { cls: 'b-under', label: 'Subvaluada' };
-  if (stock.mos >= -25) return { cls: 'b-fair', label: 'Cerca del valor' };
-  return { cls: 'b-over', label: 'Sobrevaluada' };
+  if (!stock.valid || stock.mos == null) return { cls: 'b-na', label: t('v_na') };
+  if (stock.mos >= 33) return { cls: 'b-strong', label: t('v_strong') };
+  if (stock.mos >= 0) return { cls: 'b-under', label: t('v_under') };
+  if (stock.mos >= -25) return { cls: 'b-fair', label: t('v_fair') };
+  return { cls: 'b-over', label: t('v_over') };
 }
 function starsHtml(n) {
   n = n || 0;
@@ -112,9 +135,13 @@ function initData() {
   } else {
     DATA = imported || bundled || { updated: null, stocks: [] };
   }
-  $('hdrUpdated').textContent = DATA.updated
-    ? `${DATA.stocks.length} acciones · ${fmtDate(DATA.updated)}`
-    : 'Sin datos';
+  updateHdr();
+}
+
+function updateHdr() {
+  $('hdrUpdated').textContent = DATA && DATA.updated
+    ? `${DATA.stocks.length} ${t('hdr_stocks')} · ${fmtDate(DATA.updated)}`
+    : t('hdr_nodata');
 }
 
 // ── Filtros y orden ───────────────────────────────────────────────────────
@@ -147,14 +174,14 @@ function applyFilters() {
   shown = 0;
   $('stockList').innerHTML = '';
   renderMore();
-  $('resultCount').textContent = `${filtered.length} resultado${filtered.length === 1 ? '' : 's'}`;
+  $('resultCount').textContent = `${filtered.length} ${filtered.length === 1 ? t('result') : t('results')}`;
 }
 
 function renderMore() {
   const list = $('stockList');
   const slice = filtered.slice(shown, shown + PAGE);
   if (shown === 0 && slice.length === 0) {
-    list.innerHTML = '<div class="empty-msg"><div class="big">🔍</div>Sin resultados con estos filtros.</div>';
+    list.innerHTML = `<div class="empty-msg"><div class="big">🔍</div>${t('empty_results')}</div>`;
     $('btnMore').style.display = 'none';
     return;
   }
@@ -167,7 +194,7 @@ function renderMore() {
     card.innerHTML = `
       <div class="sc-top">
         <span class="sc-ticker">${escHtml(s.ticker)}</span>
-        <span class="sc-badge ${warn ? 'b-fair' : v.cls}">${warn ? '⚠ Dato dudoso' : v.label}</span>
+        <span class="sc-badge ${warn ? 'b-fair' : v.cls}">${warn ? t('v_anomaly') : v.label}</span>
       </div>
       <div class="sc-mos">${mosHtml(s.mos)}</div>
       <div class="sc-name">${escHtml(s.name || '')}</div>
@@ -190,15 +217,15 @@ function renderStats() {
   const under = valid.filter((s) => s.mos >= 0);
   const strong = valid.filter((s) => s.mos >= 33);
   $('statsRow').innerHTML = `
-    <div class="stat"><div class="v">${st.length}</div><div class="l">Total</div></div>
-    <div class="stat"><div class="v">${valid.length}</div><div class="l">Válidas</div></div>
-    <div class="stat s-green"><div class="v">${under.length}</div><div class="l">Subval.</div></div>
-    <div class="stat s-strong"><div class="v">${strong.length}</div><div class="l">MoS≥33%</div></div>`;
+    <div class="stat"><div class="v">${st.length}</div><div class="l">${t('st_total')}</div></div>
+    <div class="stat"><div class="v">${valid.length}</div><div class="l">${t('st_valid')}</div></div>
+    <div class="stat s-green"><div class="v">${under.length}</div><div class="l">${t('st_under')}</div></div>
+    <div class="stat s-strong"><div class="v">${strong.length}</div><div class="l">${t('st_strong')}</div></div>`;
 }
 
 function renderSectorSelect() {
   const sectors = [...new Set(DATA.stocks.map((s) => s.sector).filter((x) => x && x !== 'N/A'))].sort();
-  $('sectorSel').innerHTML = '<option value="">Todos los sectores</option>' +
+  $('sectorSel').innerHTML = `<option value="">${t('sec_all')}</option>` +
     sectors.map((s) => `<option value="${escHtml(s)}">${escHtml(s)}</option>`).join('');
 }
 
@@ -230,31 +257,31 @@ function openDetail(s) {
         <div class="dt-name">${escHtml(s.name || '')}</div>
         <div class="dt-sector">${escHtml(s.sector || '')} · ${fmtMcap(s.market_cap)}</div>
       </div>
-      <button class="dt-bookmark ${isBm ? 'on' : ''}" id="dtBookmark" title="Guardar en watchlist">
+      <button class="dt-bookmark ${isBm ? 'on' : ''}" id="dtBookmark" title="${t('tt_bookmark')}">
         <svg viewBox="0 0 24 24" fill="${isBm ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
       </button>
     </div>
     <div class="dt-verdict" style="background:${verdictBg};color:${verdictColor}">
-      <span class="lbl">${v.label}<br>Margen de seguridad</span>
+      <span class="lbl">${v.label}<br>${t('dt_mos_label')}</span>
       <span class="val">${s.mos != null ? (s.mos >= 0 ? '+' : '') + s.mos.toFixed(1) + '%' : 'N/A'}</span>
     </div>
     <div class="dt-grid">
-      <div class="dt-metric"><div class="k">Precio actual</div><div class="v">${fmtMoney(s.price)}</div></div>
-      <div class="dt-metric"><div class="k">Graham Number</div><div class="v">${fmtMoney(s.graham_num)}</div></div>
-      <div class="dt-metric"><div class="k">EPS (TTM)</div><div class="v">${s.eps != null ? s.eps : '—'}</div></div>
+      <div class="dt-metric"><div class="k">${t('dt_price')}</div><div class="v">${fmtMoney(s.price)}</div></div>
+      <div class="dt-metric"><div class="k">${t('dt_gn')}</div><div class="v">${fmtMoney(s.graham_num)}</div></div>
+      <div class="dt-metric"><div class="k">${t('dt_eps')}</div><div class="v">${s.eps != null ? s.eps : '—'}</div></div>
       <div class="dt-metric"><div class="k">BVPS</div><div class="v">${s.bvps != null ? s.bvps : '—'}</div></div>
       <div class="dt-metric"><div class="k">P/E</div><div class="v">${pe != null ? pe.toFixed(1) : '—'}</div></div>
       <div class="dt-metric"><div class="k">P/B</div><div class="v">${pb != null ? pb.toFixed(2) : '—'}</div></div>
     </div>
     <div class="dt-crit">
-      <div class="card-title">Criterios Graham ${starsHtml(s.stars)}</div>
-      ${crit(s.valid && s.price < s.graham_num, 'Precio < Graham Number', null)}
+      <div class="card-title">${t('dt_crit_title')} ${starsHtml(s.stars)}</div>
+      ${crit(s.valid && s.price < s.graham_num, t('dt_c1'), null)}
       ${crit(pe != null && pe <= 15, 'P/E ≤ 15', pe != null ? pe.toFixed(1) : '—')}
       ${crit(pb != null && pb <= 1.5, 'P/B ≤ 1.5', pb != null ? pb.toFixed(2) : '—')}
       ${crit(pexpb != null && pexpb <= 22.5, 'P/E × P/B ≤ 22.5', pexpb != null ? pexpb.toFixed(1) : '—')}
     </div>
-    ${ANOMALIES[s.ticker] ? `<div class="warn-box">⚠️ ${escHtml(ANOMALIES[s.ticker])}</div>` : ''}
-    <a class="dt-link" href="https://finance.yahoo.com/quote/${encodeURIComponent(s.ticker)}" target="_blank" rel="noopener">Ver en Yahoo Finance ↗</a>`;
+    ${ANOMALIES[s.ticker] ? `<div class="warn-box">⚠️ ${t(ANOMALIES[s.ticker])}</div>` : ''}
+    <a class="dt-link" href="https://finance.yahoo.com/quote/${encodeURIComponent(s.ticker)}" target="_blank" rel="noopener">${t('dt_yahoo')}</a>`;
 
   $('dtBookmark').addEventListener('click', toggleBookmark);
   $('sheet').classList.add('open');
@@ -271,11 +298,11 @@ function toggleBookmark() {
   let bookmarks = loadJSON(LS.bookmarks, []);
   const tk = currentDetail.ticker;
   if (bookmarks.includes(tk)) {
-    bookmarks = bookmarks.filter((t) => t !== tk);
-    toast(`${tk} eliminado de la watchlist`);
+    bookmarks = bookmarks.filter((x) => x !== tk);
+    toast(tf('toast_bm_del', { tk }));
   } else {
     bookmarks.push(tk);
-    toast(`${tk} guardado en la watchlist`);
+    toast(tf('toast_bm_add', { tk }));
   }
   saveJSON(LS.bookmarks, bookmarks);
   const btn = $('dtBookmark');
@@ -294,10 +321,10 @@ function renderWatchlist() {
     .filter(Boolean);
 
   const total = manual.length + bmStocks.length;
-  $('wlCount').textContent = total ? `${total} acción${total === 1 ? '' : 'es'}` : '';
+  $('wlCount').textContent = total ? `${total} ${total === 1 ? t('wl_n_one') : t('wl_n_many')}` : '';
 
   if (!total) {
-    $('wlBody').innerHTML = '<div class="empty-msg"><div class="big">📋</div>Agrega acciones manualmente o guárdalas desde el screener con el botón <b>🔖</b>.</div>';
+    $('wlBody').innerHTML = `<div class="empty-msg"><div class="big">📋</div>${t('wl_empty')}</div>`;
     return;
   }
 
@@ -328,12 +355,12 @@ function renderWatchlist() {
         const list = loadJSON(LS.watchlist, []);
         const removed = list.splice(Number(idx), 1);
         saveJSON(LS.watchlist, list);
-        toast(`${removed[0]?.ticker || ''} eliminado`);
+        toast(tf('toast_removed', { tk: removed[0]?.ticker || '' }));
       } else {
         let bms = loadJSON(LS.bookmarks, []);
-        bms = bms.filter((t) => t !== idx);
+        bms = bms.filter((x) => x !== idx);
         saveJSON(LS.bookmarks, bms);
-        toast(`${idx} eliminado`);
+        toast(tf('toast_removed', { tk: idx }));
       }
       renderWatchlist();
     });
@@ -349,7 +376,7 @@ function wlRow(s, src, idx) {
       <div class="wl-main" ${openAttr}>
         <div class="wl-tk">${escHtml(s.ticker)} ${starsHtml(s.stars)}</div>
         <div class="wl-nm">${escHtml(s.name || '')}</div>
-        <div class="wl-src">${src === 'manual' ? 'Manual' : 'Screener'}</div>
+        <div class="wl-src">${src === 'manual' ? t('wl_manual') : t('wl_screener')}</div>
       </div>
       <div class="wl-metrics">
         <div class="wl-mos">${mosHtml(s.mos)}</div>
@@ -368,26 +395,26 @@ function addManualStock() {
   const bvps = parseFloat($('fBv').value);
   const name = $('fNm').value.trim();
 
-  if (!tk) { toast('Escribe un ticker'); return; }
-  if (!price || price <= 0) { toast('Precio inválido'); return; }
-  if (isNaN(eps) || isNaN(bvps)) { toast('EPS y BVPS son obligatorios'); return; }
+  if (!tk) { toast(t('toast_ticker_req')); return; }
+  if (!price || price <= 0) { toast(t('toast_price_bad')); return; }
+  if (isNaN(eps) || isNaN(bvps)) { toast(t('toast_eps_req')); return; }
 
   const list = loadJSON(LS.watchlist, []);
-  if (list.some((x) => x.ticker === tk)) { toast(`${tk} ya está en la watchlist`); return; }
+  if (list.some((x) => x.ticker === tk)) { toast(tf('toast_dupe', { tk })); return; }
   list.push({ ticker: tk, name: name || tk, price, eps, bvps, added: new Date().toISOString() });
   saveJSON(LS.watchlist, list);
 
   ['fTk', 'fPr', 'fEp', 'fBv', 'fNm'].forEach((id) => { $(id).value = ''; });
-  toast(`${tk} agregado ✓`);
+  toast(tf('toast_added', { tk }));
   renderWatchlist();
 }
 
 // ── Mercado: Buffett + sectores + top ─────────────────────────────────────
 function biZone(v) {
-  if (v < 75) return { label: 'Subvaluado', bg: 'var(--green-bg)', color: 'var(--green-text)', arc: '#059669' };
-  if (v < 90) return { label: 'Valor justo', bg: 'var(--yellow-bg)', color: 'var(--yellow-text)', arc: '#d97706' };
-  if (v < 115) return { label: 'Sobrevaluado', bg: 'var(--orange-bg)', color: 'var(--orange-text)', arc: '#ea580c' };
-  return { label: 'Zona de peligro', bg: 'var(--red-bg)', color: 'var(--red-text)', arc: '#dc2626' };
+  if (v < 75) return { label: t('z_low'), bg: 'var(--green-bg)', color: 'var(--green-text)', arc: '#059669' };
+  if (v < 90) return { label: t('z_fair'), bg: 'var(--yellow-bg)', color: 'var(--yellow-text)', arc: '#d97706' };
+  if (v < 115) return { label: t('z_high'), bg: 'var(--orange-bg)', color: 'var(--orange-text)', arc: '#ea580c' };
+  return { label: t('z_danger'), bg: 'var(--red-bg)', color: 'var(--red-text)', arc: '#dc2626' };
 }
 
 function renderBI() {
@@ -426,10 +453,10 @@ function renderBI() {
     $('biPill').textContent = zone.label;
     $('biPill').style.background = zone.bg;
     $('biPill').style.color = zone.color;
-    $('biDate').textContent = bi.date ? 'Actualizado: ' + fmtDate(bi.date) : '';
+    $('biDate').textContent = bi.date ? tf('bi_updated', { date: fmtDate(bi.date) }) : '';
   } else {
     $('biNum').textContent = '—';
-    $('biPill').textContent = 'Sin dato';
+    $('biPill').textContent = t('bi_nodata');
     $('biPill').style.background = '';
     $('biPill').style.color = '';
     $('biDate').textContent = '';
@@ -438,11 +465,11 @@ function renderBI() {
 
 function updateBI() {
   const v = parseFloat($('biIn').value);
-  if (isNaN(v) || v <= 0 || v > 500) { toast('Ingresa un valor entre 1 y 500'); return; }
+  if (isNaN(v) || v <= 0 || v > 500) { toast(t('toast_bi_range')); return; }
   saveJSON(LS.bi, { value: v, date: new Date().toISOString() });
   $('biIn').value = '';
   renderBI();
-  toast('Indicador Buffett actualizado ✓');
+  toast(t('toast_bi_ok'));
 }
 
 function renderMarket() {
@@ -452,7 +479,7 @@ function renderMarket() {
   const bySector = {};
   for (const s of DATA.stocks) {
     if (!s.valid || s.mos == null || s.mos < 0) continue;
-    const sec = s.sector && s.sector !== 'N/A' ? s.sector : 'Otros';
+    const sec = s.sector && s.sector !== 'N/A' ? s.sector : t('sec_others');
     bySector[sec] = (bySector[sec] || 0) + 1;
   }
   const entries = Object.entries(bySector).sort((a, b) => b[1] - a[1]);
@@ -463,7 +490,7 @@ function renderMarket() {
         <div class="sbar-head"><span class="sbar-name">${escHtml(sec)}</span><span class="sbar-n">${n}</span></div>
         <div class="sbar-track"><div class="sbar-fill" style="width:${(n / maxN * 100).toFixed(0)}%"></div></div>
       </div>`).join('')
-    : '<div class="empty-msg">Sin acciones subvaluadas en el dataset.</div>';
+    : `<div class="empty-msg">${t('sec_empty')}</div>`;
 
   // top 10 por MoS (excluye tickers con datos anómalos conocidos)
   const top = DATA.stocks
@@ -498,21 +525,21 @@ function parseScreenerText(text) {
   return obj;
 }
 
-function adoptData(obj, verb) {
+function adoptData(obj, toastKey) {
   saveJSON(LS.data, obj);
   initData();
   renderAll();
-  toast(`✓ Datos ${verb}: ${obj.stocks.length} acciones (${fmtDate(obj.updated)})`);
+  toast(tf(toastKey, { n: obj.stocks.length, date: fmtDate(obj.updated) }));
 }
 
 function handleImportFile(file) {
   const reader = new FileReader();
   reader.onload = () => {
     try {
-      adoptData(parseScreenerText(String(reader.result)), 'importados');
+      adoptData(parseScreenerText(String(reader.result)), 'toast_data_imported');
     } catch (e) {
       console.error(e);
-      toast('⚠ No se pudo leer el archivo. Usa graham_screen.json o graham_data.js');
+      toast(t('toast_import_err'));
     }
   };
   reader.readAsText(file);
@@ -523,20 +550,20 @@ let refreshing = false;
 async function refreshData(silent) {
   if (refreshing) return;
   refreshing = true;
-  if (!silent) toast('Buscando datos nuevos…');
+  if (!silent) toast(t('toast_searching'));
   try {
     const resp = await fetch('data.js?t=' + Date.now(), { cache: 'no-store' });
     if (!resp.ok) throw new Error('HTTP ' + resp.status);
     const obj = parseScreenerText(await resp.text());
     const current = DATA?.updated ? new Date(DATA.updated) : 0;
     if (new Date(obj.updated) <= current) {
-      if (!silent) toast('Ya tienes los datos más recientes ✓');
+      if (!silent) toast(t('toast_latest'));
     } else {
-      adoptData(obj, 'actualizados');
+      adoptData(obj, 'toast_data_updated');
     }
   } catch (e) {
     console.warn('refreshData:', e);
-    if (!silent) toast('⚠ Sin conexión — no se pudo actualizar');
+    if (!silent) toast(t('toast_refresh_err'));
   } finally {
     refreshing = false;
   }
@@ -578,6 +605,16 @@ document.addEventListener('DOMContentLoaded', () => {
   applyTheme(savedTheme);
   $('btnTheme').addEventListener('click', () =>
     applyTheme(document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'));
+
+  // idioma: guardado, o el del teléfono
+  const savedLang = localStorage.getItem(LS.lang)
+    || ((navigator.language || 'es').toLowerCase().startsWith('es') ? 'es' : 'en');
+  applyLang(savedLang);
+  $('btnLang').addEventListener('click', () => {
+    applyLang(LANG === 'es' ? 'en' : 'es');
+    updateHdr();
+    renderAll();
+  });
 
   initData();
   renderAll();

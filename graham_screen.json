@@ -1,5 +1,5 @@
 {
- "updated": "2026-07-16T22:47:54.340490",
+ "updated": "2026-07-16T23:51:33.912936",
  "source": "Yahoo Finance via yfinance (S&P 500 + S&P MidCap 400)",
  "complete": true,
  "total": 845,
@@ -166,12 +166,12 @@
    "currency": "USD",
    "price": 17.17,
    "eps": 1.58,
-   "bvps": 33.56,
+   "bvps": 33.81,
    "pe": 10.9,
    "pb": 0.51,
    "market_cap": 1229543680,
-   "graham_num": 34.54,
-   "mos": 50.3,
+   "graham_num": 34.67,
+   "mos": 50.5,
    "stars": 4,
    "de": 191.0,
    "cr": 39.05,
@@ -327,7 +327,7 @@
    "stars": 4,
    "de": 61.9,
    "cr": 11.12,
-   "div": 1.8,
+   "div": null,
    "valid": true
   },
   {
@@ -403,7 +403,7 @@
    "stars": 3,
    "de": 23.7,
    "cr": 0.36,
-   "div": 4.32,
+   "div": null,
    "valid": true
   },
   {
@@ -802,7 +802,7 @@
    "stars": 4,
    "de": 37.3,
    "cr": 14.97,
-   "div": 1.92,
+   "div": null,
    "valid": true
   },
   {
@@ -973,7 +973,7 @@
    "stars": 3,
    "de": 226.1,
    "cr": 0.74,
-   "div": 3.51,
+   "div": null,
    "valid": true
   },
   {
@@ -1049,7 +1049,26 @@
    "stars": 4,
    "de": 45.6,
    "cr": 1.12,
-   "div": 3.72,
+   "div": null,
+   "valid": true
+  },
+  {
+   "ticker": "VLY",
+   "name": "Valley National Bancorp",
+   "sector": "Financial Services",
+   "currency": "USD",
+   "price": 15.19,
+   "eps": 1.11,
+   "bvps": 13.48,
+   "pe": 13.7,
+   "pb": 1.13,
+   "market_cap": 8417256448,
+   "graham_num": 18.35,
+   "mos": 17.2,
+   "stars": 4,
+   "de": null,
+   "cr": null,
+   "div": null,
    "valid": true
   },
   {
@@ -1072,25 +1091,6 @@
    "valid": true
   },
   {
-   "ticker": "VLY",
-   "name": "Valley National Bancorp",
-   "sector": "Financial Services",
-   "currency": "USD",
-   "price": 15.19,
-   "eps": 1.11,
-   "bvps": 13.39,
-   "pe": 13.7,
-   "pb": 1.13,
-   "market_cap": 8417256448,
-   "graham_num": 18.29,
-   "mos": 16.9,
-   "stars": 4,
-   "de": null,
-   "cr": null,
-   "div": 0.44,
-   "valid": true
-  },
-  {
    "ticker": "PRU",
    "name": "Prudential Financial, Inc.",
    "sector": "Financial Services",
@@ -1106,7 +1106,7 @@
    "stars": 4,
    "de": 159.0,
    "cr": 0.81,
-   "div": 5.6,
+   "div": null,
    "valid": true
   },
   {
@@ -1125,7 +1125,7 @@
    "stars": 3,
    "de": 253.1,
    "cr": 1.3,
-   "div": 0.52,
+   "div": null,
    "valid": true
   },
   {
@@ -1281,6 +1281,25 @@
    "valid": true
   },
   {
+   "ticker": "TRMK",
+   "name": "Trustmark Corporation",
+   "sector": "Financial Services",
+   "currency": "USD",
+   "price": 47.66,
+   "eps": 3.77,
+   "bvps": 36.28,
+   "pe": 12.6,
+   "pb": 1.31,
+   "market_cap": 2793140480,
+   "graham_num": 55.48,
+   "mos": 14.1,
+   "stars": 4,
+   "de": null,
+   "cr": null,
+   "div": 1.0,
+   "valid": true
+  },
+  {
    "ticker": "WBS",
    "name": "Webster Financial Corporation",
    "sector": "Financial Services",
@@ -1338,25 +1357,6 @@
    "valid": true
   },
   {
-   "ticker": "TRMK",
-   "name": "Trustmark Corporation",
-   "sector": "Financial Services",
-   "currency": "USD",
-   "price": 47.66,
-   "eps": 3.77,
-   "bvps": 35.95,
-   "pe": 12.6,
-   "pb": 1.33,
-   "market_cap": 2793140480,
-   "graham_num": 55.22,
-   "mos": 13.7,
-   "stars": 4,
-   "de": null,
-   "cr": null,
-   "div": 1.0,
-   "valid": true
-  },
-  {
    "ticker": "EPAM",
    "name": "EPAM Systems, Inc.",
    "sector": "Technology",
@@ -1382,13 +1382,13 @@
    "currency": "USD",
    "price": 73.31,
    "eps": 6.44,
-   "bvps": 48.18,
+   "bvps": 49.16,
    "pe": 11.4,
-   "pb": 1.52,
+   "pb": 1.49,
    "market_cap": 10783301632,
-   "graham_num": 83.55,
-   "mos": 12.3,
-   "stars": 3,
+   "graham_num": 84.4,
+   "mos": 13.1,
+   "stars": 4,
    "de": null,
    "cr": null,
    "div": null,
@@ -1600,7 +1600,7 @@
    "stars": 3,
    "de": 86.3,
    "cr": 1.68,
-   "div": 0.15,
+   "div": null,
    "valid": true
   },
   {
@@ -1695,7 +1695,7 @@
    "stars": 3,
    "de": 182.0,
    "cr": 0.87,
-   "div": 1.56,
+   "div": null,
    "valid": true
   },
   {
@@ -1733,7 +1733,7 @@
    "stars": 3,
    "de": 192.0,
    "cr": 0.64,
-   "div": 2.83,
+   "div": null,
    "valid": true
   },
   {
@@ -1794,25 +1794,6 @@
    "valid": true
   },
   {
-   "ticker": "UMBF",
-   "name": "UMB Financial Corporation",
-   "sector": "Financial Services",
-   "currency": "USD",
-   "price": 148.02,
-   "eps": 11.43,
-   "bvps": 99.15,
-   "pe": 13.0,
-   "pb": 1.49,
-   "market_cap": 11246371840,
-   "graham_num": 159.68,
-   "mos": 7.3,
-   "stars": 4,
-   "de": null,
-   "cr": null,
-   "div": 1.72,
-   "valid": true
-  },
-  {
    "ticker": "HIG",
    "name": "The Hartford Insurance Group, Inc.",
    "sector": "Financial Services",
@@ -1870,18 +1851,37 @@
    "valid": true
   },
   {
+   "ticker": "UMBF",
+   "name": "UMB Financial Corporation",
+   "sector": "Financial Services",
+   "currency": "USD",
+   "price": 148.02,
+   "eps": 11.43,
+   "bvps": 97.41,
+   "pe": 13.0,
+   "pb": 1.52,
+   "market_cap": 11246371840,
+   "graham_num": 158.28,
+   "mos": 6.5,
+   "stars": 3,
+   "de": null,
+   "cr": null,
+   "div": 1.72,
+   "valid": true
+  },
+  {
    "ticker": "MTB",
    "name": "M&T Bank Corporation",
    "sector": "Financial Services",
    "currency": "USD",
    "price": 254.04,
    "eps": 18.89,
-   "bvps": 173.83,
+   "bvps": 173.5,
    "pe": 13.4,
    "pb": 1.46,
    "market_cap": 36818776064,
-   "graham_num": 271.81,
-   "mos": 6.5,
+   "graham_num": 271.56,
+   "mos": 6.4,
    "stars": 4,
    "de": null,
    "cr": null,
@@ -2056,7 +2056,7 @@
    "stars": 3,
    "de": 56.4,
    "cr": 1.01,
-   "div": 1.04,
+   "div": null,
    "valid": true
   },
   {
@@ -2088,7 +2088,7 @@
    "bvps": 53.19,
    "pe": 12.8,
    "pb": 1.66,
-   "market_cap": 266721345536,
+   "market_cap": 269510885376,
    "graham_num": 90.74,
    "mos": 2.9,
    "stars": 3,
@@ -2113,7 +2113,7 @@
    "stars": 3,
    "de": 34.7,
    "cr": 1.79,
-   "div": 2.0,
+   "div": null,
    "valid": true
   },
   {
@@ -2284,7 +2284,7 @@
    "stars": 3,
    "de": 31.5,
    "cr": 0.39,
-   "div": 4.08,
+   "div": null,
    "valid": true
   },
   {
@@ -2316,13 +2316,13 @@
    "bvps": 39.34,
    "pe": 14.2,
    "pb": 1.56,
-   "market_cap": 431534833664,
+   "market_cap": 436369391616,
    "graham_num": 61.91,
    "mos": 0.7,
    "stars": 3,
    "de": null,
    "cr": null,
-   "div": 1.12,
+   "div": null,
    "valid": true
   },
   {
@@ -2721,7 +2721,7 @@
    "stars": 1,
    "de": 89.6,
    "cr": 1.47,
-   "div": 3.36,
+   "div": null,
    "valid": true
   },
   {
@@ -2740,7 +2740,7 @@
    "stars": 1,
    "de": 67.9,
    "cr": 2.9,
-   "div": 0.56,
+   "div": null,
    "valid": true
   },
   {
@@ -2778,7 +2778,7 @@
    "stars": 1,
    "de": 137.1,
    "cr": 1.4,
-   "div": 1.72,
+   "div": null,
    "valid": true
   },
   {
@@ -2873,7 +2873,7 @@
    "stars": 0,
    "de": 146.9,
    "cr": 0.57,
-   "div": 1.85,
+   "div": null,
    "valid": true
   },
   {
@@ -3120,7 +3120,7 @@
    "stars": 0,
    "de": 69.0,
    "cr": 1.52,
-   "div": 6.88,
+   "div": null,
    "valid": true
   },
   {
@@ -3234,7 +3234,7 @@
    "stars": 1,
    "de": 199.0,
    "cr": 1.15,
-   "div": 0.72,
+   "div": null,
    "valid": true
   },
   {
@@ -3253,7 +3253,7 @@
    "stars": 1,
    "de": 25.0,
    "cr": 1.34,
-   "div": 6.52,
+   "div": null,
    "valid": true
   },
   {
@@ -3348,7 +3348,7 @@
    "stars": 1,
    "de": 67.9,
    "cr": 2.9,
-   "div": 0.56,
+   "div": null,
    "valid": true
   },
   {
@@ -3386,7 +3386,7 @@
    "stars": 1,
    "de": 15.8,
    "cr": 2.44,
-   "div": 1.04,
+   "div": null,
    "valid": true
   },
   {
@@ -3462,7 +3462,7 @@
    "stars": 1,
    "de": 45.7,
    "cr": 1.49,
-   "div": 1.6,
+   "div": null,
    "valid": true
   },
   {
@@ -3500,7 +3500,7 @@
    "stars": 1,
    "de": 201.6,
    "cr": 0.33,
-   "div": 0.45,
+   "div": null,
    "valid": true
   },
   {
@@ -3539,25 +3539,6 @@
    "de": 59.8,
    "cr": 1.73,
    "div": 0.96,
-   "valid": true
-  },
-  {
-   "ticker": "URBN",
-   "name": "Urban Outfitters, Inc.",
-   "sector": "Consumer Cyclical",
-   "currency": "USD",
-   "price": 75.42,
-   "eps": 5.2,
-   "bvps": 31.39,
-   "pe": 14.5,
-   "pb": 2.4,
-   "market_cap": 6458597376,
-   "graham_num": 60.6,
-   "mos": -24.5,
-   "stars": 1,
-   "de": 46.1,
-   "cr": 1.48,
-   "div": null,
    "valid": true
   },
   {
@@ -3656,6 +3637,25 @@
    "valid": true
   },
   {
+   "ticker": "URBN",
+   "name": "Urban Outfitters, Inc.",
+   "sector": "Consumer Cyclical",
+   "currency": "USD",
+   "price": 75.42,
+   "eps": 5.2,
+   "bvps": 30.5,
+   "pe": 14.5,
+   "pb": 2.47,
+   "market_cap": 6458597376,
+   "graham_num": 59.73,
+   "mos": -26.3,
+   "stars": 1,
+   "de": 46.1,
+   "cr": 1.48,
+   "div": null,
+   "valid": true
+  },
+  {
    "ticker": "PRK",
    "name": "Park National Corporation",
    "sector": "Financial Services",
@@ -3728,7 +3728,7 @@
    "stars": 1,
    "de": 23.5,
    "cr": 5.51,
-   "div": 1.32,
+   "div": null,
    "valid": true
   },
   {
@@ -3747,7 +3747,7 @@
    "stars": 1,
    "de": 43.8,
    "cr": 3.54,
-   "div": 2.4,
+   "div": null,
    "valid": true
   },
   {
@@ -3766,7 +3766,7 @@
    "stars": 0,
    "de": 8.6,
    "cr": 3.56,
-   "div": 3.76,
+   "div": null,
    "valid": true
   },
   {
@@ -3899,7 +3899,7 @@
    "stars": 1,
    "de": 96.6,
    "cr": 0.42,
-   "div": 0.78,
+   "div": null,
    "valid": true
   },
   {
@@ -4064,7 +4064,7 @@
    "bvps": 41.04,
    "pe": 18.6,
    "pb": 2.14,
-   "market_cap": 2316211200,
+   "market_cap": 2295063040,
    "graham_num": 65.95,
    "mos": -33.1,
    "stars": 0,
@@ -4222,7 +4222,7 @@
    "stars": 0,
    "de": 36.1,
    "cr": 1.29,
-   "div": 3.36,
+   "div": null,
    "valid": true
   },
   {
@@ -4317,7 +4317,7 @@
    "stars": 0,
    "de": 64.4,
    "cr": 1.02,
-   "div": 0.65,
+   "div": null,
    "valid": true
   },
   {
@@ -4469,7 +4469,7 @@
    "stars": 0,
    "de": 64.6,
    "cr": 1.0,
-   "div": 4.0,
+   "div": null,
    "valid": true
   },
   {
@@ -4887,7 +4887,7 @@
    "stars": 0,
    "de": 65.0,
    "cr": 3.24,
-   "div": 0.92,
+   "div": null,
    "valid": true
   },
   {
@@ -4926,6 +4926,25 @@
    "de": 269.4,
    "cr": 1.44,
    "div": 0.36,
+   "valid": true
+  },
+  {
+   "ticker": "GS",
+   "name": "The Goldman Sachs Group, Inc.",
+   "sector": "Financial Services",
+   "currency": "USD",
+   "price": 1095.46,
+   "eps": 64.75,
+   "bvps": 366.45,
+   "pe": 16.9,
+   "pb": 2.99,
+   "market_cap": 323168829440,
+   "graham_num": 730.67,
+   "mos": -49.9,
+   "stars": 0,
+   "de": 647.2,
+   "cr": 2.57,
+   "div": null,
    "valid": true
   },
   {
@@ -5062,25 +5081,6 @@
    "valid": true
   },
   {
-   "ticker": "GS",
-   "name": "The Goldman Sachs Group, Inc.",
-   "sector": "Financial Services",
-   "currency": "USD",
-   "price": 1095.46,
-   "eps": 64.75,
-   "bvps": 356.27,
-   "pe": 16.9,
-   "pb": 3.07,
-   "market_cap": 323168829440,
-   "graham_num": 720.45,
-   "mos": -52.1,
-   "stars": 0,
-   "de": 647.2,
-   "cr": 2.57,
-   "div": 18.0,
-   "valid": true
-  },
-  {
    "ticker": "BKR",
    "name": "Baker Hughes Company",
    "sector": "Energy",
@@ -5147,7 +5147,7 @@
    "bvps": 14.45,
    "pe": 30.2,
    "pb": 1.78,
-   "market_cap": 14147807232,
+   "market_cap": 14148596736,
    "graham_num": 16.62,
    "mos": -54.7,
    "stars": 0,
@@ -5248,7 +5248,7 @@
    "stars": 0,
    "de": 42.5,
    "cr": 1.34,
-   "div": 1.18,
+   "div": null,
    "valid": true
   },
   {
@@ -5343,7 +5343,7 @@
    "stars": 0,
    "de": null,
    "cr": null,
-   "div": 3.2,
+   "div": null,
    "valid": true
   },
   {
@@ -5375,7 +5375,7 @@
    "bvps": 82.72,
    "pe": 24.2,
    "pb": 2.36,
-   "market_cap": 27735988224,
+   "market_cap": 73296994304,
    "graham_num": 122.55,
    "mos": -59.5,
    "stars": 0,
@@ -5552,7 +5552,7 @@
    "stars": 0,
    "de": 85.3,
    "cr": 1.69,
-   "div": 2.63,
+   "div": null,
    "valid": true
   },
   {
@@ -5780,7 +5780,7 @@
    "stars": 0,
    "de": 73.2,
    "cr": 1.04,
-   "div": 3.02,
+   "div": null,
    "valid": true
   },
   {
@@ -5818,7 +5818,7 @@
    "stars": 0,
    "de": 104.7,
    "cr": 1.27,
-   "div": 3.76,
+   "div": null,
    "valid": true
   },
   {
@@ -5932,7 +5932,7 @@
    "stars": 0,
    "de": 78.4,
    "cr": 0.12,
-   "div": 2.81,
+   "div": null,
    "valid": true
   },
   {
@@ -6027,7 +6027,7 @@
    "stars": 0,
    "de": 102.7,
    "cr": 1.15,
-   "div": 9.4,
+   "div": null,
    "valid": true
   },
   {
@@ -6103,7 +6103,7 @@
    "stars": 0,
    "de": 190.4,
    "cr": 0.65,
-   "div": 3.04,
+   "div": null,
    "valid": true
   },
   {
@@ -6312,7 +6312,7 @@
    "stars": 0,
    "de": 218.6,
    "cr": 1.09,
-   "div": 4.08,
+   "div": null,
    "valid": true
   },
   {
@@ -6322,12 +6322,12 @@
    "currency": "USD",
    "price": 24.66,
    "eps": 0.68,
-   "bvps": 11.65,
+   "bvps": 11.64,
    "pe": 36.3,
    "pb": 2.12,
    "market_cap": 7930155008,
    "graham_num": 13.35,
-   "mos": -84.7,
+   "mos": -84.8,
    "stars": 0,
    "de": 60.0,
    "cr": 0.96,
@@ -6464,7 +6464,7 @@
    "stars": 0,
    "de": 98.1,
    "cr": 0.69,
-   "div": 6.48,
+   "div": null,
    "valid": true
   },
   {
@@ -6502,7 +6502,7 @@
    "stars": 0,
    "de": 100.9,
    "cr": 0.87,
-   "div": 2.66,
+   "div": null,
    "valid": true
   },
   {
@@ -6521,7 +6521,7 @@
    "stars": 0,
    "de": 42.7,
    "cr": 1.58,
-   "div": 4.8,
+   "div": null,
    "valid": true
   },
   {
@@ -6597,7 +6597,7 @@
    "stars": 0,
    "de": 18.4,
    "cr": 1.46,
-   "div": 1.72,
+   "div": null,
    "valid": true
   },
   {
@@ -6673,7 +6673,7 @@
    "stars": 0,
    "de": 29.0,
    "cr": 2.09,
-   "div": 2.52,
+   "div": null,
    "valid": true
   },
   {
@@ -6711,7 +6711,7 @@
    "stars": 0,
    "de": 73.5,
    "cr": 2.06,
-   "div": 3.25,
+   "div": null,
    "valid": true
   },
   {
@@ -6844,7 +6844,7 @@
    "stars": 0,
    "de": 120.8,
    "cr": 0.63,
-   "div": 1.28,
+   "div": null,
    "valid": true
   },
   {
@@ -6882,7 +6882,7 @@
    "stars": 0,
    "de": 90.6,
    "cr": 1.67,
-   "div": 1.89,
+   "div": null,
    "valid": true
   },
   {
@@ -7110,7 +7110,7 @@
    "stars": 0,
    "de": 46.6,
    "cr": 1.72,
-   "div": 0.28,
+   "div": null,
    "valid": true
   },
   {
@@ -7186,7 +7186,7 @@
    "stars": 0,
    "de": 74.2,
    "cr": 1.96,
-   "div": 1.64,
+   "div": null,
    "valid": true
   },
   {
@@ -7623,7 +7623,7 @@
    "stars": 0,
    "de": 20.5,
    "cr": 1.55,
-   "div": 2.36,
+   "div": null,
    "valid": true
   },
   {
@@ -7699,7 +7699,7 @@
    "stars": 0,
    "de": 240.5,
    "cr": 1.17,
-   "div": 2.52,
+   "div": null,
    "valid": true
   },
   {
@@ -7813,7 +7813,7 @@
    "stars": 0,
    "de": 56.2,
    "cr": 1.06,
-   "div": 2.8,
+   "div": null,
    "valid": true
   },
   {
@@ -7870,7 +7870,7 @@
    "stars": 0,
    "de": 82.9,
    "cr": 1.53,
-   "div": 1.88,
+   "div": null,
    "valid": true
   },
   {
@@ -7889,7 +7889,7 @@
    "stars": 0,
    "de": 99.8,
    "cr": 0.08,
-   "div": 6.12,
+   "div": null,
    "valid": true
   },
   {
@@ -7908,7 +7908,7 @@
    "stars": 0,
    "de": 181.5,
    "cr": 1.21,
-   "div": 6.56,
+   "div": null,
    "valid": true
   },
   {
@@ -7984,7 +7984,7 @@
    "stars": 0,
    "de": 121.9,
    "cr": 0.3,
-   "div": 10.36,
+   "div": null,
    "valid": true
   },
   {
@@ -8041,7 +8041,7 @@
    "stars": 0,
    "de": 211.2,
    "cr": 0.8,
-   "div": 6.76,
+   "div": null,
    "valid": true
   },
   {
@@ -8060,7 +8060,7 @@
    "stars": 0,
    "de": 56.0,
    "cr": 2.37,
-   "div": 3.68,
+   "div": null,
    "valid": true
   },
   {
@@ -8079,7 +8079,7 @@
    "stars": 0,
    "de": 76.6,
    "cr": 1.23,
-   "div": 4.88,
+   "div": null,
    "valid": true
   },
   {
@@ -8193,7 +8193,7 @@
    "stars": 0,
    "de": 63.0,
    "cr": 5.01,
-   "div": 1.64,
+   "div": null,
    "valid": true
   },
   {
@@ -8231,7 +8231,7 @@
    "stars": 0,
    "de": 140.4,
    "cr": 1.87,
-   "div": 5.2,
+   "div": null,
    "valid": true
   },
   {
@@ -8345,7 +8345,7 @@
    "stars": 0,
    "de": 94.6,
    "cr": 1.97,
-   "div": 3.28,
+   "div": null,
    "valid": true
   },
   {
@@ -8535,7 +8535,7 @@
    "stars": 0,
    "de": 57.2,
    "cr": 1.02,
-   "div": 2.92,
+   "div": null,
    "valid": true
   },
   {
@@ -8554,7 +8554,7 @@
    "stars": 0,
    "de": 217.3,
    "cr": 0.2,
-   "div": 5.0,
+   "div": null,
    "valid": true
   },
   {
@@ -8630,7 +8630,7 @@
    "stars": 0,
    "de": 94.1,
    "cr": 1.08,
-   "div": 1.5,
+   "div": null,
    "valid": true
   },
   {
@@ -8706,7 +8706,7 @@
    "stars": 0,
    "de": 113.4,
    "cr": 0.61,
-   "div": 2.24,
+   "div": null,
    "valid": true
   },
   {
@@ -8719,7 +8719,7 @@
    "bvps": 24.39,
    "pe": 37.0,
    "pb": 4.05,
-   "market_cap": 8273227776,
+   "market_cap": 8250697216,
    "graham_num": 38.28,
    "mos": -157.8,
    "stars": 0,
@@ -8896,7 +8896,7 @@
    "stars": 0,
    "de": 104.0,
    "cr": 2.24,
-   "div": 4.06,
+   "div": null,
    "valid": true
   },
   {
@@ -8915,7 +8915,7 @@
    "stars": 0,
    "de": 155.1,
    "cr": 1.07,
-   "div": 3.28,
+   "div": null,
    "valid": true
   },
   {
@@ -8972,7 +8972,7 @@
    "stars": 0,
    "de": 177.8,
    "cr": 1.57,
-   "div": 3.8,
+   "div": null,
    "valid": true
   },
   {
@@ -9029,7 +9029,7 @@
    "stars": 0,
    "de": 35.6,
    "cr": 2.35,
-   "div": 2.1,
+   "div": null,
    "valid": true
   },
   {
@@ -9238,7 +9238,7 @@
    "stars": 0,
    "de": 138.8,
    "cr": 1.43,
-   "div": 1.44,
+   "div": null,
    "valid": true
   },
   {
@@ -9384,13 +9384,13 @@
    "bvps": 101.53,
    "pe": 34.0,
    "pb": 5.9,
-   "market_cap": 161786167296,
+   "market_cap": 161684422656,
    "graham_num": 200.68,
    "mos": -198.5,
    "stars": 0,
    "de": 376.0,
    "cr": 2.21,
-   "div": 6.48,
+   "div": null,
    "valid": true
   },
   {
@@ -9447,7 +9447,7 @@
    "stars": 0,
    "de": 21.9,
    "cr": 3.26,
-   "div": 1.2,
+   "div": null,
    "valid": true
   },
   {
@@ -9542,7 +9542,7 @@
    "stars": 0,
    "de": 767.3,
    "cr": 0.62,
-   "div": 0.36,
+   "div": null,
    "valid": true
   },
   {
@@ -9675,7 +9675,7 @@
    "stars": 0,
    "de": 13.4,
    "cr": 1.26,
-   "div": 1.6,
+   "div": null,
    "valid": true
   },
   {
@@ -9827,7 +9827,7 @@
    "stars": 0,
    "de": 20.0,
    "cr": 1.92,
-   "div": 0.88,
+   "div": null,
    "valid": true
   },
   {
@@ -9846,7 +9846,7 @@
    "stars": 0,
    "de": 57.9,
    "cr": 2.85,
-   "div": 1.02,
+   "div": null,
    "valid": true
   },
   {
@@ -9865,7 +9865,7 @@
    "stars": 0,
    "de": 20.0,
    "cr": 1.92,
-   "div": 0.88,
+   "div": null,
    "valid": true
   },
   {
@@ -9922,7 +9922,7 @@
    "stars": 0,
    "de": 457.5,
    "cr": 0.2,
-   "div": 8.8,
+   "div": null,
    "valid": true
   },
   {
@@ -10030,7 +10030,7 @@
    "bvps": 63.14,
    "pe": 39.5,
    "pb": 6.54,
-   "market_cap": 12393479168,
+   "market_cap": 12398786560,
    "graham_num": 121.9,
    "mos": -238.7,
    "stars": 0,
@@ -10074,7 +10074,7 @@
    "stars": 0,
    "de": 68.5,
    "cr": 0.46,
-   "div": 3.0,
+   "div": null,
    "valid": true
   },
   {
@@ -10397,7 +10397,7 @@
    "stars": 0,
    "de": 67.5,
    "cr": 0.93,
-   "div": 1.68,
+   "div": null,
    "valid": true
   },
   {
@@ -10572,6 +10572,25 @@
    "valid": true
   },
   {
+   "ticker": "USPH",
+   "name": "U.S. Physical Therapy, Inc.",
+   "sector": "Healthcare",
+   "currency": "USD",
+   "price": 74.19,
+   "eps": 0.5,
+   "bvps": 31.5,
+   "pe": 148.4,
+   "pb": 2.35,
+   "market_cap": 1129081984,
+   "graham_num": 18.83,
+   "mos": -294.1,
+   "stars": 0,
+   "de": 46.3,
+   "cr": 1.19,
+   "div": 1.82,
+   "valid": true
+  },
+  {
    "ticker": "EAT",
    "name": "Brinker International, Inc.",
    "sector": "Consumer Cyclical",
@@ -10588,25 +10607,6 @@
    "de": 430.5,
    "cr": 0.4,
    "div": null,
-   "valid": true
-  },
-  {
-   "ticker": "USPH",
-   "name": "U.S. Physical Therapy, Inc.",
-   "sector": "Healthcare",
-   "currency": "USD",
-   "price": 74.19,
-   "eps": 0.5,
-   "bvps": 30.79,
-   "pe": 148.4,
-   "pb": 2.41,
-   "market_cap": 1129081984,
-   "graham_num": 18.61,
-   "mos": -298.6,
-   "stars": 0,
-   "de": 46.3,
-   "cr": 1.19,
-   "div": 1.82,
    "valid": true
   },
   {
@@ -10682,7 +10682,7 @@
    "stars": 0,
    "de": 74.9,
    "cr": 1.54,
-   "div": 1.78,
+   "div": null,
    "valid": true
   },
   {
@@ -10891,7 +10891,7 @@
    "stars": 0,
    "de": 981.4,
    "cr": 0.92,
-   "div": 1.1,
+   "div": null,
    "valid": true
   },
   {
@@ -10923,7 +10923,7 @@
    "bvps": 29.53,
    "pe": 36.6,
    "pb": 12.06,
-   "market_cap": 22381400064,
+   "market_cap": 22421272576,
    "graham_num": 80.44,
    "mos": -342.8,
    "stars": 0,
@@ -11024,7 +11024,7 @@
    "stars": 0,
    "de": 163.0,
    "cr": 1.18,
-   "div": 19.7,
+   "div": null,
    "valid": true
   },
   {
@@ -11043,7 +11043,7 @@
    "stars": 0,
    "de": 136.3,
    "cr": 1.14,
-   "div": 1.92,
+   "div": null,
    "valid": true
   },
   {
@@ -11214,7 +11214,7 @@
    "stars": 0,
    "de": 623.8,
    "cr": 1.26,
-   "div": 10.08,
+   "div": null,
    "valid": true
   },
   {
@@ -11271,7 +11271,7 @@
    "stars": 0,
    "de": 133.1,
    "cr": 1.71,
-   "div": 1.0,
+   "div": null,
    "valid": true
   },
   {
@@ -11328,7 +11328,7 @@
    "stars": 0,
    "de": 444.6,
    "cr": 0.3,
-   "div": 6.98,
+   "div": null,
    "valid": true
   },
   {
@@ -11423,7 +11423,7 @@
    "stars": 0,
    "de": 321.1,
    "cr": 0.57,
-   "div": 2.22,
+   "div": null,
    "valid": true
   },
   {
@@ -11442,7 +11442,7 @@
    "stars": 0,
    "de": 64.0,
    "cr": 2.69,
-   "div": 9.27,
+   "div": null,
    "valid": true
   },
   {
@@ -11683,7 +11683,7 @@
    "bvps": 12.67,
    "pe": 96.6,
    "pb": 8.53,
-   "market_cap": 1262415872,
+   "market_cap": 1264396800,
    "graham_num": 17.87,
    "mos": -505.2,
    "stars": 0,
@@ -11765,7 +11765,7 @@
    "stars": 0,
    "de": 69.1,
    "cr": 1.14,
-   "div": 0.44,
+   "div": null,
    "valid": true
   },
   {
@@ -11784,7 +11784,7 @@
    "stars": 0,
    "de": 80.4,
    "cr": 1.61,
-   "div": 1.12,
+   "div": null,
    "valid": true
   },
   {
@@ -11860,7 +11860,7 @@
    "stars": 0,
    "de": 479.2,
    "cr": 0.84,
-   "div": 1.9,
+   "div": null,
    "valid": true
   },
   {
@@ -11955,7 +11955,7 @@
    "stars": 0,
    "de": 60.3,
    "cr": 1.07,
-   "div": 5.88,
+   "div": null,
    "valid": true
   },
   {
@@ -11974,7 +11974,7 @@
    "stars": 0,
    "de": 87.8,
    "cr": 2.44,
-   "div": 0.48,
+   "div": null,
    "valid": true
   },
   {
@@ -12069,7 +12069,7 @@
    "stars": 0,
    "de": 0.5,
    "cr": 4.79,
-   "div": 8.0,
+   "div": null,
    "valid": true
   },
   {
@@ -12088,7 +12088,7 @@
    "stars": 0,
    "de": 79.5,
    "cr": 1.07,
-   "div": 1.08,
+   "div": null,
    "valid": true
   },
   {
@@ -12259,7 +12259,7 @@
    "stars": 0,
    "de": 105.4,
    "cr": 3.03,
-   "div": 0.92,
+   "div": null,
    "valid": true
   },
   {
@@ -12443,7 +12443,7 @@
    "bvps": 4.88,
    "pe": 70.9,
    "pb": 152.76,
-   "market_cap": 167160463360,
+   "market_cap": 168668692480,
    "graham_num": 33.99,
    "mos": -2093.5,
    "stars": 0,
@@ -12705,13 +12705,13 @@
    "bvps": -16.52,
    "pe": 18.3,
    "pb": -13.08,
-   "market_cap": 121265758208,
+   "market_cap": 121202442240,
    "graham_num": null,
    "mos": null,
    "stars": 0,
    "de": null,
    "cr": 1.09,
-   "div": 5.0,
+   "div": null,
    "valid": false
   },
   {
@@ -12749,7 +12749,7 @@
    "stars": 0,
    "de": null,
    "cr": 0.92,
-   "div": 2.48,
+   "div": null,
    "valid": false
   },
   {
@@ -12759,9 +12759,9 @@
    "currency": "USD",
    "price": 152.1,
    "eps": 6.19,
-   "bvps": -26.39,
+   "bvps": -26.44,
    "pe": 24.6,
-   "pb": -5.76,
+   "pb": -5.75,
    "market_cap": 41921990656,
    "graham_num": null,
    "mos": null,
@@ -13058,7 +13058,7 @@
    "stars": 0,
    "de": 62.6,
    "cr": 0.54,
-   "div": 1.92,
+   "div": null,
    "valid": false
   },
   {
@@ -13443,7 +13443,7 @@
    "stars": 0,
    "de": 66.5,
    "cr": 0.8,
-   "div": 2.88,
+   "div": null,
    "valid": false
   },
   {
@@ -13462,7 +13462,7 @@
    "stars": 0,
    "de": null,
    "cr": 0.77,
-   "div": 3.46,
+   "div": null,
    "valid": false
   },
   {
@@ -13500,7 +13500,7 @@
    "stars": 0,
    "de": null,
    "cr": 0.2,
-   "div": 5.0,
+   "div": null,
    "valid": false
   },
   {
@@ -13538,7 +13538,7 @@
    "stars": 0,
    "de": null,
    "cr": 0.84,
-   "div": 1.7,
+   "div": null,
    "valid": false
   },
   {
@@ -13695,7 +13695,7 @@
    "stars": 0,
    "de": 251.7,
    "cr": 1.29,
-   "div": 0.32,
+   "div": null,
    "valid": false
   },
   {
@@ -14043,7 +14043,7 @@
    "stars": 0,
    "de": null,
    "cr": 0.99,
-   "div": 1.68,
+   "div": null,
    "valid": false
   },
   {
@@ -14086,8 +14086,22 @@
   },
   {
    "ticker": "JWN",
-   "valid": false,
-   "error": "404 Client Error: Not Found for url: https://query2.finance."
+   "name": "JWN",
+   "sector": "N/A",
+   "currency": "USD",
+   "price": null,
+   "eps": null,
+   "bvps": null,
+   "pe": null,
+   "pb": null,
+   "market_cap": null,
+   "graham_num": null,
+   "mos": null,
+   "stars": 0,
+   "de": null,
+   "cr": null,
+   "div": null,
+   "valid": false
   },
   {
    "ticker": "LANC",
@@ -14234,8 +14248,22 @@
   },
   {
    "ticker": "PDCO",
-   "valid": false,
-   "error": "404 Client Error: Not Found for url: https://query2.finance."
+   "name": "PDCO",
+   "sector": "N/A",
+   "currency": "USD",
+   "price": null,
+   "eps": null,
+   "bvps": null,
+   "pe": null,
+   "pb": null,
+   "market_cap": null,
+   "graham_num": null,
+   "mos": null,
+   "stars": 0,
+   "de": null,
+   "cr": null,
+   "div": null,
+   "valid": false
   },
   {
    "ticker": "PEB",
@@ -14472,8 +14500,22 @@
   },
   {
    "ticker": "SUM",
-   "valid": false,
-   "error": "404 Client Error: Not Found for url: https://query2.finance."
+   "name": "SUM",
+   "sector": "N/A",
+   "currency": "USD",
+   "price": null,
+   "eps": null,
+   "bvps": null,
+   "pe": null,
+   "pb": null,
+   "market_cap": null,
+   "graham_num": null,
+   "mos": null,
+   "stars": 0,
+   "de": null,
+   "cr": null,
+   "div": null,
+   "valid": false
   },
   {
    "ticker": "TALO",
@@ -14510,7 +14552,7 @@
    "stars": 0,
    "de": null,
    "cr": 2.93,
-   "div": 2.4,
+   "div": null,
    "valid": false
   },
   {
@@ -14572,8 +14614,22 @@
   },
   {
    "ticker": "X",
-   "valid": false,
-   "error": "404 Client Error: Not Found for url: https://query2.finance."
+   "name": "X",
+   "sector": "N/A",
+   "currency": "USD",
+   "price": null,
+   "eps": null,
+   "bvps": null,
+   "pe": null,
+   "pb": null,
+   "market_cap": null,
+   "graham_num": null,
+   "mos": null,
+   "stars": 0,
+   "de": null,
+   "cr": null,
+   "div": null,
+   "valid": false
   },
   {
    "ticker": "XRAY",
@@ -14744,7 +14800,7 @@
    "currency": "USD",
    "price": 2.8,
    "eps": -10.23,
-   "bvps": 4.43,
+   "bvps": 4.42,
    "pe": null,
    "pb": 0.63,
    "market_cap": 147959600,
@@ -14929,8 +14985,22 @@
   },
   {
    "ticker": "LBAI",
-   "valid": false,
-   "error": "404 Client Error: Not Found for url: https://query2.finance."
+   "name": "LBAI",
+   "sector": "N/A",
+   "currency": "USD",
+   "price": null,
+   "eps": null,
+   "bvps": null,
+   "pe": null,
+   "pb": null,
+   "market_cap": null,
+   "graham_num": null,
+   "mos": null,
+   "stars": 0,
+   "de": null,
+   "cr": null,
+   "div": null,
+   "valid": false
   },
   {
    "ticker": "MBUU",
@@ -15100,7 +15170,7 @@
    "stars": 0,
    "de": 243.1,
    "cr": 1.04,
-   "div": 0.28,
+   "div": null,
    "valid": false
   },
   {
@@ -15419,8 +15489,22 @@
   },
   {
    "ticker": "SJW",
-   "valid": false,
-   "error": "404 Client Error: Not Found for url: https://query2.finance."
+   "name": "SJW",
+   "sector": "N/A",
+   "currency": "USD",
+   "price": null,
+   "eps": null,
+   "bvps": null,
+   "pe": null,
+   "pb": null,
+   "market_cap": null,
+   "graham_num": null,
+   "mos": null,
+   "stars": 0,
+   "de": null,
+   "cr": null,
+   "div": null,
+   "valid": false
   },
   {
    "ticker": "SMTC",
@@ -15486,8 +15570,22 @@
   },
   {
    "ticker": "TRQ",
-   "valid": false,
-   "error": "404 Client Error: Not Found for url: https://query2.finance."
+   "name": "TRQ",
+   "sector": "N/A",
+   "currency": "USD",
+   "price": null,
+   "eps": null,
+   "bvps": null,
+   "pe": null,
+   "pb": null,
+   "market_cap": null,
+   "graham_num": null,
+   "mos": null,
+   "stars": 0,
+   "de": null,
+   "cr": null,
+   "div": null,
+   "valid": false
   },
   {
    "ticker": "TWI",
@@ -15653,9 +15751,9 @@
    "currency": "USD",
    "price": 14.95,
    "eps": -2.29,
-   "bvps": 6.96,
+   "bvps": 8.84,
    "pe": null,
-   "pb": 2.15,
+   "pb": 1.69,
    "market_cap": 1108416896,
    "graham_num": null,
    "mos": null,

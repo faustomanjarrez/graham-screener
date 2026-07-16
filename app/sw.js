@@ -1,5 +1,5 @@
 /* Graham Screener — service worker (offline-first, actualizaciones atómicas) */
-const CACHE = 'graham-v7';
+const CACHE = 'graham-v8';
 const ASSETS = [
   './',
   './index.html',
@@ -33,9 +33,12 @@ self.addEventListener('activate', (e) => {
 });
 
 // Estrategia:
-// - data.js: cache-first con revalidación en segundo plano (los datos cambian a diario
-//   sin que cambie la app; la app además compara fechas vía localStorage).
-// - Resto del app-shell: SOLO lo que se cacheó en la instalación. Así una versión nueva
+// - data.js SIN query (arranque): caché primero para abrir rápido + revalidación
+//   en segundo plano que actualiza la copia canónica './data.js'.
+// - data.js CON query (?t=..., botón/auto-refresh): SIEMPRE red primero — nunca
+//   responder con caché a una petición explícita de datos frescos. Caché solo si
+//   no hay conexión.
+// - Resto del app-shell: SOLO lo cacheado en la instalación. Así una versión nueva
 //   de la app llega completa (nuevo sw.js → reinstalación atómica) y nunca a medias.
 self.addEventListener('fetch', (e) => {
   if (e.request.method !== 'GET') return;
@@ -45,17 +48,21 @@ self.addEventListener('fetch', (e) => {
   const isData = url.pathname.endsWith('/data.js');
 
   e.respondWith(
-    caches.match(e.request, { ignoreSearch: isData }).then((cached) => {
+    caches.match(e.request).then((cached) => {
       if (isData) {
         const fetched = fetch(e.request)
           .then((resp) => {
             if (resp.ok) {
               const clone = resp.clone();
-              caches.open(CACHE).then((c) => c.put(e.request, clone));
+              // guardar bajo la clave canónica para que el arranque offline
+              // use siempre la última versión descargada
+              caches.open(CACHE).then((c) => c.put('./data.js', clone));
             }
             return resp;
           })
-          .catch(() => cached);
+          .catch(() => cached || caches.match('./data.js'));
+        // sin query (arranque): sirve caché ya, revalida atrás
+        // con query (refresh explícito): va a la red
         return cached || fetched;
       }
       return cached || fetch(e.request);

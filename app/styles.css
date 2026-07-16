@@ -143,6 +143,8 @@ main { padding: 14px 14px 20px; max-width: 720px; margin: 0 auto; }
   white-space: nowrap;
 }
 .chip.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+#qualityChips { margin-top: -2px; }
+.chip-q.active { background: var(--accent-soft); color: var(--accent-text); border-color: var(--accent); }
 
 .selects-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; }
 .selects-row select {

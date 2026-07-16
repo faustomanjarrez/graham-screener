@@ -58,6 +58,11 @@
     <button class="chip" data-filter="over" data-i18n="f_over">Sobrevaluadas</button>
   </div>
 
+  <div class="chips-scroll" id="qualityChips">
+    <button class="chip chip-q" data-q="debt" data-i18n="f_qdebt">💪 Deuda baja</button>
+    <button class="chip chip-q" data-q="div" data-i18n="f_qdiv">💵 Dividendo</button>
+  </div>
+
   <div class="selects-row">
     <select id="sectorSel" aria-label="Sector"></select>
     <select id="sortSel" aria-label="Sort">
@@ -146,6 +151,7 @@
       <li data-i18n="g_m4">Precio &lt; Graham # → la acción cotiza bajo su valor intrínseco</li>
       <li data-i18n="g_m5">Graham recomendaba comprar con <strong>margen de seguridad ≥ 33%</strong></li>
       <li data-i18n="g_m6">EPS o BVPS negativos → Graham # inválido (no aplica el método)</li>
+      <li data-i18n="g_m7"><strong>Filtros de calidad:</strong> Deuda/Capital &lt; 100% y pago de dividendo ayudan a evitar <em>value traps</em> — acciones baratas por una razón</li>
     </ul>
   </div>
   <div class="card">

@@ -83,6 +83,8 @@ SIN ANUNCIOS · SIN REGISTRO · SIN RECOLECCIÓN DE DATOS
 🔍 SCREENER COMPLETO
 • Graham Number, margen de seguridad y score de 4 estrellas para cada acción
 • Filtros: margen ≥ 33 %, subvaluadas, 4 estrellas, por sector
+• Filtros de calidad anti value-trap: deuda/capital < 100 % y pago de dividendo
+• Alerta educativa cuando el P/E es sospechosamente bajo
 • Búsqueda por ticker o nombre y 6 criterios de ordenamiento
 • Ficha de análisis con P/E, P/B, EPS, BVPS y checklist de criterios Graham
 • Datos actualizados automáticamente cada día hábil tras el cierre de NYSE

@@ -39,7 +39,7 @@ let filtered = [];          // resultado de filtros actual
 let shown = 0;              // cuántos cards se han renderizado
 const PAGE = 60;
 
-const state = { filter: 'all', search: '', sector: '', sort: 'mos' };
+const state = { filter: 'all', search: '', sector: '', sort: 'mos', qDebt: false, qDiv: false };
 
 // Tickers con datos conocidamente poco confiables en Yahoo Finance → clave i18n
 const ANOMALIES = {
@@ -151,6 +151,9 @@ function applyFilters() {
   filtered = DATA.stocks.filter((s) => {
     if (q && !(s.ticker || '').toUpperCase().includes(q) && !(s.name || '').toUpperCase().includes(q)) return false;
     if (state.sector && s.sector !== state.sector) return false;
+    // filtros de calidad (combinables con todo lo demás)
+    if (state.qDebt && !(s.de != null && s.de < 100)) return false;
+    if (state.qDiv && !(s.div != null && s.div > 0)) return false;
     switch (state.filter) {
       case 'strong': return s.valid && s.mos != null && s.mos >= 33;
       case 'under': return s.valid && s.mos != null && s.mos >= 0;
@@ -273,7 +276,11 @@ function openDetail(s) {
       <div class="dt-metric"><div class="k">BVPS</div><div class="v">${s.bvps != null ? s.bvps : '—'}</div></div>
       <div class="dt-metric"><div class="k">P/E</div><div class="v">${pe != null ? pe.toFixed(1) : '—'}</div></div>
       <div class="dt-metric"><div class="k">P/B</div><div class="v">${pb != null ? pb.toFixed(2) : '—'}</div></div>
+      <div class="dt-metric"><div class="k">${t('dt_de')}</div><div class="v">${s.de != null ? s.de.toFixed(0) + '%' : '—'}</div></div>
+      <div class="dt-metric"><div class="k">${t('dt_div')}</div><div class="v">${s.div != null && s.div > 0 && s.price ? (s.div / s.price * 100).toFixed(1) + '%' : '—'}</div></div>
+      <div class="dt-metric"><div class="k">${t('dt_cr')}</div><div class="v">${s.cr != null ? s.cr.toFixed(2) : '—'}</div></div>
     </div>
+    ${pe != null && pe > 0 && pe < 5 ? `<div class="warn-box">${t('warn_lowpe')}</div>` : ''}
     <div class="dt-crit">
       <div class="card-title">${t('dt_crit_title')} ${starsHtml(s.stars)}</div>
       ${crit(s.valid && s.price < s.graham_num, t('dt_c1'), null)}
@@ -630,6 +637,13 @@ document.addEventListener('DOMContentLoaded', () => {
       $('filterChips').querySelector('.chip.active').classList.remove('active');
       chip.classList.add('active');
       state.filter = chip.dataset.filter;
+      applyFilters();
+    }));
+  $('qualityChips').querySelectorAll('.chip-q').forEach((chip) =>
+    chip.addEventListener('click', () => {
+      chip.classList.toggle('active');
+      if (chip.dataset.q === 'debt') state.qDebt = chip.classList.contains('active');
+      if (chip.dataset.q === 'div') state.qDiv = chip.classList.contains('active');
       applyFilters();
     }));
   let searchTimer = null;

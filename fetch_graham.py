@@ -304,6 +304,10 @@ def fetch_stock(ticker, max_retries=4):
             mcap   = info.get("marketCap")
             name   = (info.get("longName") or info.get("shortName") or ticker)[:40]
             sector = info.get("sector") or info.get("industry") or "N/A"
+            # Criterios de calidad Graham (filtran value traps)
+            de   = info.get("debtToEquity")      # deuda/capital en % (ej. 41.5)
+            cr   = info.get("currentRatio")      # liquidez corriente
+            divr = info.get("dividendRate")      # dividendo anual en $/acción
 
             gn    = graham_number(eps, bvps)
             mos   = margin_of_safety(price, gn) if price and gn else None
@@ -323,6 +327,9 @@ def fetch_stock(ticker, max_retries=4):
                 "graham_num": round(gn,  2)  if gn    else None,
                 "mos":        round(mos,  1)  if mos is not None else None,
                 "stars":      stars,
+                "de":         round(de,   1) if isinstance(de,   (int, float)) else None,
+                "cr":         round(cr,   2) if isinstance(cr,   (int, float)) else None,
+                "div":        round(divr, 2) if isinstance(divr, (int, float)) else None,
                 "valid":      gn is not None and price is not None,
             }
 
